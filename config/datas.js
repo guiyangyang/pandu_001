@@ -11,8 +11,9 @@ let books = [
         linktype:'biadu',//网盘类型
         effecttime:'7day',//有效时间
         sharenum:'20',//分享次数
-        username:'xiaoyang',//上传用户名
-        userphone:'15510370703',//用户手机号
+        userid:'',
+        // username:'xiaoyang',//上传用户名
+        // userphone:'15510370703',//用户手机号
         uploadtime:'2019-04-18 12:12:12',//上传时间
         updatetime:'2019-04-20 08:08:08',//更新时间
         deletetime:'2019-05-20 11:11:11',//删除时间

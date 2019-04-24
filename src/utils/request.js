@@ -11,19 +11,27 @@ const service = axios.create({
 })
 
 // request拦截器
-service.interceptors.request.use(
-  // config => {
-  //   if (store.getters.token) {
-  //     config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
-  //   }
-  //   return config
-  // },
-  // error => {
-  //   // Do something with request error
-  //   console.log(error) // for debug
-  //   Promise.reject(error)
-  // }
-)
+// service.interceptors.request.use(
+  
+//   config => {
+//     console.log('请求 拦截器')
+//     config.headers['Content-Type'] = "application/json;charset=UTF-8"
+//     if (getToken()) {
+//       config.headers['Authorization'] = getToken()
+//     }
+//     return config
+//   //   if (store.getters.token) {
+//   //     config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+//   //   }
+//   //   return config
+//   },
+//   error => {
+//     console.log('请求 拦截器 错误')
+//     // Do something with request error
+//     console.log(error) // for debug
+//     Promise.reject(error)
+//   }
+// )
 
 // response 拦截器
 service.interceptors.response.use(

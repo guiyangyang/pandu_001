@@ -17,11 +17,11 @@
                         :options="options"
                         change-on-select
                         filterable
-                        v-model="selectedOptions"
+                        v-model="uploadForm.type"
                       ></el-cascader>
                   </el-form-item>
-                  <el-form-item label="网盘类别：" prop="linktype">
-                        <el-select v-model="checklinktype" clearable placeholder="请选择">
+                  <el-form-item label="网盘类型：" prop="linktype">
+                        <el-select v-model="uploadForm.linktype" clearable placeholder="请选择">
                             <el-option
                             v-for="item in linkTypeLists"
                             :key="item.value"
@@ -36,10 +36,12 @@
                         :autosize="{ minRows: 1, maxRows: 2}"
                         v-model="uploadForm.link" class="ipt-width"></el-input>
                   </el-form-item>
-                  <el-form-item label="分享密码：" prop="password">
-                       <el-radio v-model="uploadForm.pwdRadio" label="1">无</el-radio>
-                       <el-radio v-model="uploadForm.pwdRadio" label="2">有</el-radio>
-                       <el-input v-model="uploadForm.password" style="width:20%;"></el-input>
+                  <el-form-item label="分享密码：" prop="pwdRadio">
+                    <el-radio-group v-model="uploadForm.pwdRadio">
+                       <el-radio  label="1">无</el-radio>
+                       <el-radio  label="2">有</el-radio>
+                    </el-radio-group> 
+                       <el-input :disabled="uploadForm.pwdRadio == 1" v-model="uploadForm.password" style="width:30%;padding:6px !important;"></el-input>
                   </el-form-item>
                   <el-form-item label="有效期限：" prop="effecttime">
                        <el-radio-group v-model="uploadForm.effecttime">
@@ -50,7 +52,7 @@
                   </el-form-item>
                    <el-form-item>
                         <el-button type="primary" @click="onSubmit" size="small">立即上传</el-button>
-                        <el-button size="small">取消重置</el-button>
+                        <el-button size="small" @click="resetForm">取消重置</el-button>
                     </el-form-item>
               </el-form>
             </el-col>
@@ -77,20 +79,55 @@
     </div>
 </template>
 <script>
+import { uploadForm } from "@/api/uploadForm"
 export default {
     data() {
+      const validateLink = (rule, value, callback) => {
+        if(value == ''){
+          callback(new Error('请输入链接网址'))
+        }
+        if(value.slice(0,7) == 'http://' || value.slice(0,8) == 'https://'){
+             callback()
+        }else{
+             callback(new Error('请输入正确的链接网址'))
+        }
+      }
         return {
           uploadForm:{
             title:'',
             introduce:'',
+            type:['books', 'literature'],
+            linktype:'',
             link:'http://www.baidu.com',
             password:'',
-            pwdRadio:'',
+            pwdRadio:'1',
             effecttime:0,
             img:''
           },
           rules:{
-
+            title: [
+              { required: true, message: '请输入活动名称', trigger: 'blur' },
+              { min: 3, max: 25, message: '长度在 3 到 25 个字符', trigger: 'blur' }
+            ],
+            introduce: [
+              { required: true, message: '请输入活动名称', trigger: 'blur' },
+              { min: 3, max: 250, message: '长度在 3 到 250 个字符', trigger: 'blur' }
+            ],
+            type: [
+              {required: true, message: '请选择分类', trigger: 'change' }
+            ],
+            linktype: [
+              { required: true, message: '请选择网盘类型', trigger: 'change' }
+            ],
+            link: [
+              { required: true, trigger: 'blur',validator: validateLink }
+            ],
+            pwdRadio:[
+              { required: true, trigger: 'change', }
+            ],
+            effecttime:[
+              { required: true, trigger: 'change', }
+            ],
           },
           options: [{
           value: 'books',
@@ -133,8 +170,28 @@ export default {
     },
     methods:{
         onSubmit() {
-            console.log('onSubmit')
+            console.log('onSubmit 001')
+          this.$refs['uploadForm'].validate((valid) => {
+            if (valid) {
+              let datas = this.uploadForm
+              datas.userid = localStorage.getItem('userid')
+              console.log('onSubmit 002')
+              console.log(datas)
+              uploadForm(datas).then((res) => {
+                
+                console.log('上传')
+                console.log(res)
+              })
+              
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+        });
         },
+      resetForm() {
+        this.$refs['uploadForm'].resetFields();
+      },
         handleAvatarSuccess(res, file) {
             console.log(res)
             console.log(file)

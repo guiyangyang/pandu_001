@@ -45,6 +45,7 @@
 
 <script>
 // import { isvaliduserphone } from '@/utils/validate'
+// import Cookies from 'js-cookie'
 
 export default {
   name: 'Login',
@@ -109,12 +110,25 @@ export default {
         if (valid) {
           this.loading = true
           this.$router.push({ path: this.redirect || '/' })
-          // this.$store.dispatch('Login', this.loginForm).then(() => {
-          //   this.loading = false
-          //   this.$router.push({ path: this.redirect || '/' })
-          // }).catch(() => {
-          //   this.loading = false
-          // })
+          this.$store.dispatch('Login', this.loginForm).then((res) => {
+            if(res.status == '200000'){
+              console.log(res.msg)
+              console.log(res)
+              localStorage.setItem('userid',res.result.userid)
+              localStorage.setItem('userphone',res.result.userphone)
+              // Cookies.set(TokenKey, token)
+              this.loading = false
+              this.$router.push({ path: this.redirect || '/' })
+            }else{
+              this.$message({
+                message:res.msg,
+                type:'error'
+              })
+            }
+            
+          }).catch(() => {
+            this.loading = false
+          })
         } else {
           console.log('error submit!!')
           return false
@@ -129,6 +143,7 @@ export default {
           this.$store.dispatch('Register',this.loginForm).then((res) => {
             console.log('index-vue')
             console.log(res)
+            
             this.loadingR = false
             this.$router.push({ path: this.redirect || '/' })
           }).catch(() => {
