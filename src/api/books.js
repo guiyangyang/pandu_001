@@ -15,3 +15,9 @@ export function uploadForm(datas){
         data:datas
     })
 }
+export function getLiterature() {
+    return request({
+        url:'/apis/books/getLiterature',
+        method:'get',
+    })
+}

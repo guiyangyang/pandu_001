@@ -8,7 +8,7 @@
                         <div><img :src="'/static/images/books/'+book.bookimg" alt=""></div>
                         <div class="book-name" :title="book.bookname">{{book.bookname}}</div>
                         <div class="bookbtn">
-                            <span>详情</span>
+                            <span @click="getDetails">详情</span>
                             <span @click.self='getBook(index)'>获取</span>
                         </div>
                     </div>
@@ -38,6 +38,7 @@
 </template>
 <script>
 import axios from 'axios'
+import { getLiterature } from '@/api/books'
 export default {
     name:'BooksVue',
     data () {
@@ -113,13 +114,21 @@ export default {
         // })
         },
         dataInit (){
-            this.$store.dispatch('getLiterature').then((res) => {
-                console.log('获取 文学')
-                console.log('res')
-                console.log(res)
-            }).catch((err) => {
+            // this.$store.dispatch('getLiterature').then((res) => {
+            //     console.log('获取 文学')
+            //     console.log('res')
+            //     console.log(res)
+            // }).catch((err) => {
 
+            // })
+        },
+        getDetails() {
+            console.log('点击详情')
+            getLiterature().then((res) => {
+                console.log(res)
             })
+
+
         }
     }
 }

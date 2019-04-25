@@ -178,10 +178,16 @@ export default {
               console.log('onSubmit 002')
               console.log(datas)
               uploadForm(datas).then((res) => {
-                
-                console.log('上传')
-                console.log(res)
-              })
+                if(res.status == '200000'){
+                  this.$message({
+                    message:res.msg,
+                    type:'success'
+                  })
+                }
+              }).catch((err) => {
+                console.log('上传 err')
+                console.log(err)
+              }) 
               
             } else {
               console.log('error submit!!');

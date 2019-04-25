@@ -10,7 +10,7 @@ export function bkLiteratures(token) {
 
 export function uploadForm(datas){
     return request({
-        url:'/uploadForm',
+        url:'/apis/uploadForm',
         method:'post',
         data:datas
     })
