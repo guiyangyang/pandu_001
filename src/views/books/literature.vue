@@ -14,6 +14,20 @@
                     </div>
                 </el-col>
             </el-row>
+            <el-row class="fen-page">
+                <el-col :span="24">
+                    <div>
+                        <el-pagination
+                            background
+                            layout="prev, pager, next"
+                            @current-change="handleCurrentChange"
+                            :current-page.sync="currentPage"
+                            :page-size="param.pagesize"
+                            :total="total">
+                        </el-pagination>
+                    </div>
+                </el-col>
+            </el-row>
             <el-dialog
             title="快乐分享"
             :visible.sync="dialogVisible"
@@ -99,8 +113,19 @@ export default {
         return {
           dialogVisible:false,
           getBookList:{},
-          bookLists:bookDatas
+          bookLists:[],
+          param:{
+              pagenum:1,
+              pagesize:4
+          },
+          currentPage:1,
+          total:100
         }
+    },
+    computed:{
+    //    total() {
+
+    //    }
     },
     mounted (){
       this.dataInit();
@@ -116,14 +141,18 @@ export default {
         // })
         },
         dataInit (){
-            getLiterature().then((res) => {
+            this.getLiteratureList()
+        },
+        getLiteratureList() {
+            getLiterature(this.param).then((res) => {
                 if(res.status == '200000'){
-                   this.bookLists = res.result;
+                   this.bookLists = res.result.docs;
                    this.bookLists.forEach((item,index) => {
                       if(item.img == '' || item.img == undefined){
                           item.img = 'jd.jpg'
                       }
-                   })
+                   });
+                   this.total = res.result.total;
 
                 }
                 console.log(res)
@@ -133,7 +162,7 @@ export default {
         },
         getDetails() {
             console.log('点击详情')
-            getLiterature().then((res) => {
+            getLiterature(this.param).then((res) => {
                 if(res.status == '200000'){
 
                 }
@@ -143,6 +172,11 @@ export default {
             })
 
 
+        },
+        handleCurrentChange(val) {
+           console.log(`当前页数：${val}`)
+           this.param.pagenum = val;
+           this.getLiteratureList();
         }
     }
 }
@@ -203,6 +237,10 @@ export default {
     span:hover{
         color:red;
     }
+}
+.fen-page{
+    text-align: right;
+    margin-top: 20px;
 }
 .dialog-box{
     text-align: center;

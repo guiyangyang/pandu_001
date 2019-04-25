@@ -15,9 +15,11 @@ export function uploadForm(datas){
         data:datas
     })
 }
-export function getLiterature() {
+//获取  文学历史  列表
+export function getLiterature(param) {
     return request({
         url:'/apis/books/getLiterature',
-        method:'get',
+        method:'post',
+        data:param
     })
 }
