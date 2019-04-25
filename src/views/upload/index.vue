@@ -134,10 +134,23 @@ export default {
           label: '书籍库',
           children: [{
             value: 'literature',
-            label: '文学类'
-          }, {
+            label: '文学历史'
+          }, 
+          {
+            value: 'novel',
+            label: '小说传记'
+          },
+          {
             value: 'technology',
-            label: '科技类'
+            label: '科技时尚'
+          },
+          {
+            value: 'education',
+            label: '教育哲学'
+          },
+          {
+            value: 'others',
+            label: '其他类'
           }]
         },{
           value: 'videos',

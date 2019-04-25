@@ -5,8 +5,8 @@
             <el-row>
                 <el-col :span="6" v-for="(book,index) in bookLists" :key="index" >
                     <div class="book-col">
-                        <div><img :src="'/static/images/books/'+book.bookimg" alt=""></div>
-                        <div class="book-name" :title="book.bookname">{{book.bookname}}</div>
+                        <div><img :src="'/static/images/books/'+book.img" alt=""></div>
+                        <div class="book-name" :title="book.title">{{book.title}}</div>
                         <div class="bookbtn">
                             <span @click="getDetails">详情</span>
                             <span @click.self='getBook(index)'>获取</span>
@@ -22,9 +22,9 @@
                 <img src="/static/bdwp.jpg" alt="">
             
                 <div>百度盘链接：
-                 <a :href="getBookList.shareurl" target="_blank">{{getBookList.shareurl}}</a>   
+                 <a :href="getBookList.link" target="_blank">{{getBookList.link}}</a>   
                 </div>
-                <div>百度盘链接：{{getBookList.sharepassword}}</div>
+                <div>百度盘链接：{{getBookList.password}}</div>
             </div>
             <!-- <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -42,62 +42,64 @@ import { getLiterature } from '@/api/books'
 export default {
     name:'BooksVue',
     data () {
-        return {
-          dialogVisible:false,
-          getBookList:{},
-          bookLists:[
+        // 本地 测试 数据
+        const bookDatas = [
               {
                   bookid:'books-literature-1', 
-                  bookimg:'rshhh.jpg',
-                  bookname:'人生海海',
-                  shareurl:'http://www.1539.ink',
-                  sharepassword:'111'
+                  img:'rshhh.jpg',
+                  title:'人生海海',
+                  link:'http://www.1539.ink',
+                  password:'111'
               },
               {
                   bookid:'books-literature-2', 
-                  bookimg:'zhxhy.jpg',
-                  bookname:'知行合一知行合一知行合一知行合一知行合一知行合一',
-                  shareurl:'http://www.1539.ink',
-                  sharepassword:'222'
+                  img:'zhxhy.jpg',
+                  title:'知行合一知行合一知行合一知行合一知行合一知行合一',
+                  link:'http://www.1539.ink',
+                  password:'222'
               },
               {
                   bookid:'books-literature-3', 
-                  bookimg:'ajsqn.jpg',
-                  bookname:'埃及四千年',
-                  shareurl:'http://www.1539.ink',
-                  sharepassword:'333'
+                  img:'ajsqn.jpg',
+                  title:'埃及四千年',
+                  link:'http://www.1539.ink',
+                  password:'333'
               },
               {
-                  bookimg:'jd.jpg',
-                  bookname:'简单',
-                  shareurl:'http://www.1539.ink',
-                  sharepassword:'333'
+                  img:'jd.jpg',
+                  title:'简单',
+                  link:'http://www.1539.ink',
+                  password:'333'
               },
               {
-                  bookimg:'jdsxdsndq.jpg',
-                  bookname:'决定上限是你的情',
-                  shareurl:'http://www.1539.ink',
-                  sharepassword:'333'
+                  img:'jdsxdsndq.jpg',
+                  title:'决定上限是你的情',
+                  link:'http://www.1539.ink',
+                  password:'333'
               },
               {
-                  bookimg:'lj.jpg',
-                  bookname:'联结',
-                  shareurl:'http://www.1539.ink',
-                  sharepassword:'333'
+                  img:'lj.jpg',
+                  title:'联结',
+                  link:'http://www.1539.ink',
+                  password:'333'
               },
               {
-                  bookimg:'rshhh.jpg',
-                  bookname:'人生海海',
-                  shareurl:'http://www.1539.ink',
-                  sharepassword:'333'
+                  img:'rshhh.jpg',
+                  title:'人生海海',
+                  link:'http://www.1539.ink',
+                  password:'333'
               },
               {
-                  bookimg:'yjzs.jpg',
-                  bookname:'易经杂说',
-                  shareurl:'http://www.1539.ink',
-                  sharepassword:'333'
+                  img:'yjzs.jpg',
+                  title:'易经杂说',
+                  link:'http://www.1539.ink',
+                  password:'333'
               }
           ]
+        return {
+          dialogVisible:false,
+          getBookList:{},
+          bookLists:bookDatas
         }
     },
     mounted (){
@@ -114,18 +116,30 @@ export default {
         // })
         },
         dataInit (){
-            // this.$store.dispatch('getLiterature').then((res) => {
-            //     console.log('获取 文学')
-            //     console.log('res')
-            //     console.log(res)
-            // }).catch((err) => {
+            getLiterature().then((res) => {
+                if(res.status == '200000'){
+                   this.bookLists = res.result;
+                   this.bookLists.forEach((item,index) => {
+                      if(item.img == '' || item.img == undefined){
+                          item.img = 'jd.jpg'
+                      }
+                   })
 
-            // })
+                }
+                console.log(res)
+            }).catch((err) => {
+                console.log('err')
+            })
         },
         getDetails() {
             console.log('点击详情')
             getLiterature().then((res) => {
+                if(res.status == '200000'){
+
+                }
                 console.log(res)
+            }).catch((err) => {
+                
             })
 
 

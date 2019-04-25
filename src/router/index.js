@@ -48,14 +48,33 @@ export const constantRouterMap = [
         path: 'literature',
         name: 'Literature',
         component: () => import('@/views/books/literature'),
-        meta: { title: '文学类', icon: 'table' }
+        meta: { title: '文学历史', icon: 'table' }
+      },
+      {
+        path: 'novel',
+        name: 'Novel',
+        component: () => import('@/views/books/novel'),
+        meta: { title: '小说传记', icon: 'table' }
       },
       {
         path: 'technology',
         name: 'technology',
         component: () => import('@/views/books/technology'),
-        meta: { title: '科技类', icon: 'tree' }
-      }
+        meta: { title: '科技时尚', icon: 'tree' }
+      },
+      {
+        path: 'education',
+        name: 'Education',
+        component: () => import('@/views/books/education'),
+        meta: { title: '教育哲学', icon: 'table' }
+      },
+      {
+        path: 'others',
+        name: 'Others',
+        component: () => import('@/views/books/others'),
+        meta: { title: '其他类', icon: 'table' }
+      },
+      //education
     ]
   },
   {
