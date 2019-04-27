@@ -46,13 +46,36 @@
             </span> -->
             </el-dialog>
         </el-main>
-        <el-aside>aside</el-aside>
+        <el-aside class="aside-container">
+            <div>
+                <el-input placeholder="请输入内容" v-model="param.searchContent" size="small" >
+                    <el-button slot="append" icon="el-icon-search" size="small" @click="searchBook"></el-button>
+                </el-input>
+            </div>
+            <div class="latest-share">
+                <h3>最新分享榜</h3>
+                <div v-for = "(item,index) in latestShareList" :key="index" @click="shareBook(index)">
+                    {{ item.uploadtime | dateToFormatter }} | {{item.title}}231231231313213213213213213213213213213213213123123123</div>
+                
+            </div>
+            <div>
+                <h3>最新排行榜</h3>
+                <ul>
+                    <li>123123</li>
+                    <li>123123</li>
+                    <li>123123</li>
+                    <li>123123</li>
+                    <li>123123</li>
+                </ul>
+            </div>
+        </el-aside>
         </el-container>
     </div>
 </template>
 <script>
 import axios from 'axios'
-import { getLiterature } from '@/api/books'
+import { getLiterature, getLatestShare } from '@/api/books'
+import {dateTimeFormatter , dateFormatter} from '@/utils/public'
 export default {
     name:'BooksVue',
     data () {
@@ -116,49 +139,74 @@ export default {
           bookLists:[],
           param:{
               pagenum:1,
-              pagesize:4
+              pagesize:12,
+              searchType:'literature',
+              searchContent:''
           },
           currentPage:1,
-          total:100
+          total:100,
+          latestShareList:[]
         }
+        
+    },
+    created() {
+this.dataInit();
     },
     computed:{
-    //    total() {
+    //    total() {dateFormatter
 
     //    }
     },
+    filters:{
+      dateToFormatter(val) {
+          return  dateFormatter(val)  
+      }
+    },
     mounted (){
-      this.dataInit();
+    //   this.dataInit();
+
     },
     methods:{
         getBook (index) {
-        
-        this.getBookList = this.bookLists[index];
-        console.log(this.getBookList)
-        this.dialogVisible = true; 
-        // this.$nextTick(()=>{
-        //    this.dialogVisible = true; 
-        // })
+            this.getBookList = this.bookLists[index];
+            this.dialogVisible = true; 
         },
         dataInit (){
             this.getLiteratureList()
+            this.getLatestShareList()
         },
         getLiteratureList() {
             getLiterature(this.param).then((res) => {
                 if(res.status == '200000'){
-                   this.bookLists = res.result.docs;
-                   this.bookLists.forEach((item,index) => {
-                      if(item.img == '' || item.img == undefined){
-                          item.img = 'jd.jpg'
-                      }
-                   });
-                   this.total = res.result.total;
-
+                    this.bookLists = res.result.docs;
+                    this.bookLists.forEach((item,index) => {
+                        if(item.img == '' || item.img == undefined){
+                            item.img = 'jd.jpg'
+                        }
+                    });
+                    this.total = res.result.total;
                 }
-                console.log(res)
+                if(res.status == '200004'){
+                    this.$message({
+                        message:'暂无数据，请稍后再试！',
+                        type:'success'
+                    })
+                    // console.log(res.msg)
+                }
             }).catch((err) => {
                 console.log('err')
             })
+        },
+        getLatestShareList() {
+          getLatestShare({size:5}).then((res) => {
+              if(res.status == '200000'){
+                console.log('最新 分享')
+                console.log(res)
+                this.latestShareList = res.result.docs;
+              }
+          }).catch(err => {
+              console.log('err')
+          })
         },
         getDetails() {
             console.log('点击详情')
@@ -168,20 +216,29 @@ export default {
                 }
                 console.log(res)
             }).catch((err) => {
-                
             })
-
-
         },
-        handleCurrentChange(val) {
+        handleCurrentChange(val) {//分页
            console.log(`当前页数：${val}`)
            this.param.pagenum = val;
            this.getLiteratureList();
+        },
+        searchBook() {
+            let searchContent = this.param.searchContent.trim();
+            if(searchContent == '') return false;
+            this.param.pagenum = 1;
+            this.getLiteratureList();
+        
+        },
+        shareBook(index) {
+            this.getBookList = this.latestShareList[index];
+            this.dialogVisible = true; 
         }
     }
 }
 </script>
 <style lang="scss" scoped>
+$fontColor:#909399;
 .literature-box {
     // border:1px solid red;
     padding:20px;
@@ -189,10 +246,11 @@ export default {
     font-family: Arial;
     font-size: 14px;
 }
-.el-aside {
+aside.el-aside {
     // background-color: #fff;
     color: #333;
     width: 280px;
+    padding: 14px;
     // text-align: center;
     // line-height: 200px;
     border:1px solid #E9EEF3;
@@ -227,7 +285,7 @@ export default {
 }
 .bookbtn{
     margin-top: 2px;
-    color:#909399;
+    color:$fontColor;
     span{
         cursor: pointer;
     }
@@ -252,6 +310,23 @@ export default {
         white-space: nowrap;
         text-overflow: ellipsis;
     }
+}
+.latest-share{
+    h3{
+        margin:20px 0 6px;
+    }
+  div{
+      height: 20px;
+      line-height: 20px;
+      margin-left: 8px;
+      color:$fontColor;
+      text-decoration-line: underline;
+      cursor:pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+  }
 }
 </style>
 

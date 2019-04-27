@@ -23,3 +23,11 @@ export function getLiterature(param) {
         data:param
     })
 }
+//最新分享
+export function getLatestShare(param) {
+    return request({
+        url:'/apis/books/getLatestShare',
+        method:'post',
+        data:param
+    })
+}
