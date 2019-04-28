@@ -18,6 +18,18 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.main-container{
+ .navbar{
+    position: fixed;
+    left:210px;
+    right: 0;
+    background: #fff;
+    z-index: 100;
+    
+  }
+}
+</style>
 
 <style scoped>
 .app-main {
@@ -25,5 +37,7 @@ export default {
   min-height: calc(100vh - 50px);
   position: relative;
   overflow: hidden;
+  padding-top: 50px;
+ 
 }
 </style>

@@ -8,7 +8,7 @@
                         <div><img :src="'/static/images/books/'+book.img" alt=""></div>
                         <div class="book-name" :title="book.title">{{book.title}}</div>
                         <div class="bookbtn">
-                            <span @click="getDetails">详情</span>
+                            <span @click="getDetails(index)">详情</span>
                             <span @click.self='getBook(index)'>获取</span>
                         </div>
                     </div>
@@ -28,22 +28,39 @@
                     </div>
                 </el-col>
             </el-row>
+            <!-- 详情 -->
             <el-dialog
-            title="快乐分享"
+            title="资源详情"
+            :visible.sync="dialogDetail"
+            width="30%">
+            <div class="dialogdetail-box">
+                <div>
+                    <img src="../../../static/images/books/jd.jpg" alt="">
+                </div>
+                <div>
+                    <div class="title">标题：<span>{{getBookList.title}}</span></div>
+                    <div class="introduce">
+                       <div> 简介：</div>
+                       <div>{{getBookList.introduce}}</div>
+                       </div>
+                    <div class="upload-time">上传时间:{{getBookList.uploadtime | dateToFormatter}}</div>
+                </div>
+
+            </div>
+            </el-dialog>
+            <!-- 获取 -->
+            <el-dialog
+            title="资源分享"
             :visible.sync="dialogVisible"
-            width="40%">
+            width="30%">
             <div class="dialog-box">
                 <img src="/static/bdwp.jpg" alt="">
             
-                <div>百度盘链接：
+                <div>分享链接：
                  <a :href="getBookList.link" target="_blank">{{getBookList.link}}</a>   
                 </div>
-                <div>百度盘链接：{{getBookList.password}}</div>
+                <div>分享密码：{{getBookList.password}}</div>
             </div>
-            <!-- <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-            </span> -->
             </el-dialog>
         </el-main>
         <el-aside class="aside-container">
@@ -52,21 +69,42 @@
                     <el-button slot="append" icon="el-icon-search" size="small" @click="searchBook"></el-button>
                 </el-input>
             </div>
+            <!-- <div >
+                <h3>选择分类</h3>
+                <div>
+                    <el-radio-group v-model="radio1" size='small'>
+                        <el-radio-button label="全部" ></el-radio-button>
+                        <el-radio-button label="文学" ></el-radio-button>
+                        <el-radio-button label="历史" ></el-radio-button>
+                        <el-radio-button label="小说" ></el-radio-button>
+                        <el-radio-button label="传记" ></el-radio-button>
+                       
+                    </el-radio-group>
+                    <el-radio-group v-model="radio1" size='small'>
+                       
+                        <el-radio-button label="科技" ></el-radio-button>
+                        <el-radio-button label="时尚" ></el-radio-button>
+                        <el-radio-button label="教育" ></el-radio-button>
+                        <el-radio-button label="哲学" ></el-radio-button>
+                        <el-radio-button label="其他" ></el-radio-button>
+                        <el-radio-button label="深圳4" ></el-radio-button>
+                        <el-radio-button label="深圳5" ></el-radio-button>
+                    </el-radio-group>
+                </div>
+            </div> -->
             <div class="latest-share">
                 <h3>最新分享榜</h3>
                 <div v-for = "(item,index) in latestShareList" :key="index" @click="shareBook(index)">
-                    {{ item.uploadtime | dateToFormatter }} | {{item.title}}231231231313213213213213213213213213213213213123123123</div>
-                
+                    {{ item.uploadtime | dateToFormatter }} | {{item.title}}</div>
             </div>
-            <div>
+            <div class="latest-share">
                 <h3>最新排行榜</h3>
-                <ul>
-                    <li>123123</li>
-                    <li>123123</li>
-                    <li>123123</li>
-                    <li>123123</li>
-                    <li>123123</li>
-                </ul>
+                <div v-for = "(item,index) in shareRankList" :key="index" @click="shareBook(index)">
+                    {{ item.uploadtime | dateToFormatter }} | {{item.title}}</div>
+            </div>
+            <div class="appreciate">
+                <img src="../../../static/dshm.png" alt="">
+                <span>打赏2块钱，帮我买杯咖啡！</span>
             </div>
         </el-aside>
         </el-container>
@@ -74,7 +112,7 @@
 </template>
 <script>
 import axios from 'axios'
-import { getLiterature, getLatestShare } from '@/api/books'
+import { getLiterature, getLatestShare, addShareNum, shareRank } from '@/api/books'
 import {dateTimeFormatter , dateFormatter} from '@/utils/public'
 export default {
     name:'BooksVue',
@@ -135,6 +173,7 @@ export default {
           ]
         return {
           dialogVisible:false,
+          dialogDetail:false,
           getBookList:{},
           bookLists:[],
           param:{
@@ -145,7 +184,9 @@ export default {
           },
           currentPage:1,
           total:100,
-          latestShareList:[]
+          latestShareList:[],//最新分享
+          shareRankList:[],//分享排行
+          radio1:'',
         }
         
     },
@@ -170,10 +211,17 @@ this.dataInit();
         getBook (index) {
             this.getBookList = this.bookLists[index];
             this.dialogVisible = true; 
+            console.log(this.getBookList.id)
+            addShareNum({'id':this.getBookList.id}).then(res => {
+
+            }).catch(err => {
+                console.log('err')
+            })
         },
         dataInit (){
             this.getLiteratureList()
             this.getLatestShareList()
+            this.getShareRankList()
         },
         getLiteratureList() {
             getLiterature(this.param).then((res) => {
@@ -198,25 +246,30 @@ this.dataInit();
             })
         },
         getLatestShareList() {
-          getLatestShare({size:5}).then((res) => {
+          getLatestShare({size:10}).then((res) => {
               if(res.status == '200000'){
                 console.log('最新 分享')
                 console.log(res)
-                this.latestShareList = res.result.docs;
+                this.latestShareList = res.result.data;
               }
           }).catch(err => {
               console.log('err')
           })
         },
-        getDetails() {
+        getShareRankList() { //分享排行
+           shareRank({'size':6}).then(res => {
+             if(res.status == '200000'){
+                 this.shareRankList = res.result.data;
+             }
+           }).catch(err => {
+               console.log('err')
+           })
+        },
+        getDetails(index) {
+            this.getBookList = this.bookLists[index];
+            this.dialogDetail = true;
             console.log('点击详情')
-            getLiterature(this.param).then((res) => {
-                if(res.status == '200000'){
-
-                }
-                console.log(res)
-            }).catch((err) => {
-            })
+            this.getShareRankList();
         },
         handleCurrentChange(val) {//分页
            console.log(`当前页数：${val}`)
@@ -237,6 +290,17 @@ this.dataInit();
     }
 }
 </script>
+<style lang="scss">
+.literature-box {
+.el-dialog__body{
+    padding:0 20px 20px;
+}
+.el-dialog__header{
+    padding:20px 20px 0;
+}
+}
+</style>
+
 <style lang="scss" scoped>
 $fontColor:#909399;
 .literature-box {
@@ -303,7 +367,7 @@ aside.el-aside {
 .dialog-box{
     text-align: center;
     div {
-        width: 200px;
+        width: 220px;
         margin: 0 auto;
         text-align: left;
         overflow: hidden;
@@ -327,6 +391,41 @@ aside.el-aside {
       text-overflow: ellipsis;
 
   }
+}
+.appreciate{
+    img{
+        display: block;
+        width: 150px;
+        margin: 20px auto;
+    }
+    span{
+        display: block;
+        text-align: center;
+        color:$fontColor;
+    }
+}
+.dialogdetail-box{
+    display: flex;
+    flex-direction: row;
+    justify-content: content;
+    align-items: flex-start;
+    margin-top: 20px;
+    .title{
+        font-size: 16px;
+        // color: #ccc;
+    }
+    .introduce{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
+        margin: 10px 0;
+        max-height: 100px;
+        overflow: hidden;
+        div:first-child{
+            flex-shrink: 0;
+        }
+    }
 }
 </style>
 

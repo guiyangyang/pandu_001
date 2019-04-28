@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch('ToggleSideBar')
+      // this.$store.dispatch('ToggleSideBar')
     },
     logout() {
       console.log('dianji logout')
