@@ -4,12 +4,12 @@
             <el-col :span="10" class="upload-left">
               <el-form :model="uploadForm" :rules="rules" ref="uploadForm" label-width="100px" label-position="right" size="mini" autocomplete='on'>
                   <el-form-item label="标题：" prop="title">
-                      <el-input v-model="uploadForm.title" class="ipt-width"></el-input>
+                      <el-input v-model="uploadForm.title"></el-input>
                   </el-form-item>
                   <el-form-item label="简介：" prop="introduce">
                       <el-input type="textarea"
                       :autosize="{ minRows: 1, maxRows: 6}"
-                       v-model="uploadForm.introduce" class="ipt-width"></el-input>
+                       v-model="uploadForm.introduce"></el-input>
                   </el-form-item>
                   <el-form-item label="选择分类：" prop="type">
                       <el-cascader
@@ -34,7 +34,7 @@
                         <el-input 
                         type="textarea"
                         :autosize="{ minRows: 1, maxRows: 2}"
-                        v-model="uploadForm.link" class="ipt-width"></el-input>
+                        v-model="uploadForm.link" ></el-input>
                   </el-form-item>
                   <el-form-item label="分享密码：" prop="pwdRadio">
                     <el-radio-group v-model="uploadForm.pwdRadio">
@@ -58,17 +58,28 @@
             </el-col>
             <el-col :span="14" class="upload-right">
                 <el-form :model="uploadForm" :rules="rules" label-width="100px" label-position="right" size="mini" autocomplete='on'>
-                    <el-form-item label="封面图：" prop="img">
-                        <el-upload
-                            class="avatar-uploader"
-                            action="https://jsonplaceholder.typicode.com/posts/"
-                            :show-file-list="false"
-                            :on-success="handleAvatarSuccess"
-                            :before-upload="beforeAvatarUpload">
-                            <img v-if="uploadForm.img" :src="uploadForm.img" class="avatar">
-                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                            </el-upload>
-                    </el-form-item>
+                    <el-form-item label="封面图："
+                    prop="coverImg"
+                    hide-required-asterisk="false" class="cover-image">
+                      <my-upload ref="uploader" field="file"
+                      enctype="multipart/form-data"
+                      :langExt="zh"
+                      @crop-success="cropSuccess"
+                      v-model="show"
+                      :no-circle="true"
+                      :width="150"
+                      :height="150"
+                      
+                      img-format="png"></my-upload>
+                      <el-button size="small"
+                                type="primary"
+                                plain
+                                @click="toggleShow">选择图片</el-button>
+        <!-- <div class="">只能上传jpeg/jpg/png/gif格式的图片，且不超过5M</div> -->
+                      <div class="coverImg"><div>预 览</div>
+                        <img :src="detailRuleForm.coverImg"></div> 
+      </el-form-item>
+
                     <el-form-item label="示例图：" prop="tipImg">
                        <img src="../../../static/images/books/ajsqn.jpg" alt="">
                     </el-form-item>
@@ -79,7 +90,9 @@
     </div>
 </template>
 <script>
-import { uploadForm } from "@/api/uploadForm"
+import { uploadForm, upImg } from "@/api/uploadForm"
+import myUpload from "vue-image-crop-upload";
+
 export default {
     data() {
       const validateLink = (rule, value, callback) => {
@@ -178,8 +191,26 @@ export default {
                 label:'腾讯网盘',
                 value:'tx'
             }
-        ]
+        ],
+        show:false,
+        withCredentials:true,
+        params:{
+          size:5*1024*1024
+        },
+        headers:{
+          smail:'11'
+        },
+        zh:{
+          preview:'预览'
+        },
+        uploadImgUrl:'',
+        detailRuleForm:{
+          coverImg:''
         }
+        }
+    },
+    components:{
+      myUpload
     },
     methods:{
         onSubmit() {
@@ -211,69 +242,63 @@ export default {
       resetForm() {
         this.$refs['uploadForm'].resetFields();
       },
-        handleAvatarSuccess(res, file) {
-            console.log(res)
-            console.log(file)
-        this.uploadForm.img = URL.createObjectURL(file.raw);
-        console.log(this.uploadForm.img)
+      toggleShow() {
+          this.show = !this.show;
         },
-        beforeAvatarUpload(file) {
-            const isJPG = file.type === 'image/jpeg';
-            const isPNG = file.type === 'image/png';
-            const isLt2M = file.size / 1024 / 1024 < 2;
+        cropSuccess(coverImg,field) {
+          this.detailRuleForm.coverImg = coverImg;
 
-            if (!isJPG && !isPNG) {
-            this.$message.error('上传头像图片只能是 JPG PNG 格式!');
-            }
-            if (!isLt2M) {
-            this.$message.error('上传头像图片大小不能超过 2MB!');
-            }
-            return isJPG && isLt2M;
-        }
+          upImg({'img':coverImg}).then(res => {
+
+          }).catch(err => {
+
+          })
+        },
+        
     }
 }
 </script>
 <style lang="scss" scoped>
 
 .upload-container{
+  background-color: #FFF;
+  margin: 20px;
+  height: 100%;
+  // margin: 30px 30px 0;
     .upload-left{
-        padding:60px 0 0 60px;
+        padding:60px 0 0 100px;
+        // margin-right: 40px;
     }
     .upload-right{
         padding-top: 60px;
+        padding-left:30px;
     }
-    .ipt-width{
-        // width: 50%;
-    }
-    .avatar-uploader{
-        width: 156px;
-        height: 162px;
+    .cover-image{
+      position: relative;
+      width: 370px;
+      height: 150px;
+      .coverImg{
+        
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 160px;
+        height: 160px;
+        
+        box-sizing: border-box;
+        padding:4px;
         border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        overflow: hidden;
+        div{
+          position: absolute;
+          color: #d9d9d9;
+          top:66px;
+          left:62px;
+        }
+       
+      }
     }
-
-.avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 138px;
-    height: 160px;
-    line-height: 160px;
-    text-align: center;
-  }
-  .avatar {
-    width: 150px;
-    height: 160px;
-    display: block;
-  }
 }
 </style>
 

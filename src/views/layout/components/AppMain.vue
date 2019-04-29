@@ -20,9 +20,10 @@ export default {
 </script>
 <style lang="scss">
 .main-container{
+  margin-left: 180px !important;
  .navbar{
     position: fixed;
-    left:210px;
+    left:180px;
     right: 0;
     background: #fff;
     z-index: 100;
@@ -38,6 +39,7 @@ export default {
   position: relative;
   overflow: hidden;
   padding-top: 50px;
- 
+  background-color: #f9f8fc;
+  color: #303133;
 }
 </style>

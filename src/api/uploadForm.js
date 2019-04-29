@@ -15,3 +15,10 @@ export function uploadForm(datas){
         data:datas
     })
 }
+export function upImg(datas){
+    return request({
+        url:'/apis/uploadForm/upImg',
+        method:'post',
+        data:datas
+    })
+}

@@ -65,33 +65,13 @@
         </el-main>
         <el-aside class="aside-container">
             <div>
-                <el-input placeholder="请输入内容" v-model="param.searchContent" size="small" >
+                <el-input placeholder="请输入内容"
+                 v-model="param.searchContent" 
+                 clearable
+                 size="small" >
                     <el-button slot="append" icon="el-icon-search" size="small" @click="searchBook"></el-button>
                 </el-input>
             </div>
-            <!-- <div >
-                <h3>选择分类</h3>
-                <div>
-                    <el-radio-group v-model="radio1" size='small'>
-                        <el-radio-button label="全部" ></el-radio-button>
-                        <el-radio-button label="文学" ></el-radio-button>
-                        <el-radio-button label="历史" ></el-radio-button>
-                        <el-radio-button label="小说" ></el-radio-button>
-                        <el-radio-button label="传记" ></el-radio-button>
-                       
-                    </el-radio-group>
-                    <el-radio-group v-model="radio1" size='small'>
-                       
-                        <el-radio-button label="科技" ></el-radio-button>
-                        <el-radio-button label="时尚" ></el-radio-button>
-                        <el-radio-button label="教育" ></el-radio-button>
-                        <el-radio-button label="哲学" ></el-radio-button>
-                        <el-radio-button label="其他" ></el-radio-button>
-                        <el-radio-button label="深圳4" ></el-radio-button>
-                        <el-radio-button label="深圳5" ></el-radio-button>
-                    </el-radio-group>
-                </div>
-            </div> -->
             <div class="latest-share">
                 <h3>最新分享榜</h3>
                 <div v-for = "(item,index) in latestShareList" :key="index" @click="shareBook(index)">
@@ -104,7 +84,7 @@
             </div>
             <div class="appreciate">
                 <img src="../../../static/dshm.png" alt="">
-                <span>打赏2块钱，帮我买杯咖啡！</span>
+                <span>打赏1块钱，帮我买杯咖啡！</span>
             </div>
         </el-aside>
         </el-container>
@@ -306,18 +286,21 @@ $fontColor:#909399;
 .literature-box {
     // border:1px solid red;
     padding:20px;
+    // padding-left: 0;
     // background-color: #E9EEF3;
     font-family: Arial;
     font-size: 14px;
+    
 }
 aside.el-aside {
     // background-color: #fff;
     color: #333;
-    width: 280px;
+    width: 240px !important;
     padding: 14px;
     // text-align: center;
     // line-height: 200px;
     border:1px solid #E9EEF3;
+    background-color: #fff;
     // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
 }
 
@@ -328,6 +311,8 @@ aside.el-aside {
     // line-height: 160px;
     margin-right: 20px;
     border:1px solid #E9EEF3;
+    position: relative;
+    background-color: #fff;
     // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
 }
 .book-col{
@@ -361,8 +346,11 @@ aside.el-aside {
     }
 }
 .fen-page{
-    text-align: right;
-    margin-top: 20px;
+    // text-align: right;
+    // margin-top: 20px;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
 }
 .dialog-box{
     text-align: center;
