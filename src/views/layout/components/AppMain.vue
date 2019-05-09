@@ -21,12 +21,13 @@ export default {
 <style lang="scss">
 .main-container{
   margin-left: 180px !important;
+  background-color: #f9f8fc;
  .navbar{
     position: fixed;
     left:180px;
     right: 0;
     background: #fff;
-    z-index: 100;
+    z-index: 200;
     
   }
 }

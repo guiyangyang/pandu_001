@@ -1,8 +1,8 @@
 <template>
   <div class="login-container">
-    <div>
+    <!-- <div>
       <el-button type="primary" @click='ceshi'>测试请求</el-button>
-    </div>
+    </div> -->
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <div class="title">盘&nbsp;&nbsp;&nbsp;&nbsp;度 </div>
       <div class="title-tip">共享美好时光</div>
@@ -27,6 +27,7 @@
           <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
+      <verify-code></verify-code>
       <el-form-item class="form-btns">
         <el-button :loading="loadingR" type="primary" style="width:46%;" @click.native.prevent="handleRegister">
           注册
@@ -46,7 +47,7 @@
 <script>
 // import { isvaliduserphone } from '@/utils/validate'
 // import Cookies from 'js-cookie'
-
+import VerifyCode from '@/components/verifyCode';
 export default {
   name: 'Login',
   data() {
@@ -90,14 +91,17 @@ export default {
       immediate: true
     }
   },
+  components:{
+    VerifyCode
+  },
   methods: {
-    ceshi() {
-      console.log('ceshi');
-      this.$store.dispatch('CeShi').then((res) => {
-         console.log('ceshi  success')
-         console.log(res)
-      })
-    },
+    // ceshi() {
+    //   console.log('ceshi');
+    //   this.$store.dispatch('CeShi').then((res) => {
+    //      console.log('ceshi  success')
+    //      console.log(res)
+    //   })
+    // },
     showPwd() {
       if (this.pwdType === 'password') {
         this.pwdType = ''
@@ -115,7 +119,9 @@ export default {
               console.log(res.msg)
               console.log(res)
               localStorage.setItem('userid',res.result.userid)
+              localStorage.setItem('username',res.result.username)
               localStorage.setItem('userphone',res.result.userphone)
+              localStorage.setItem('email',res.result.email)
               // Cookies.set(TokenKey, token)
               this.loading = false
               this.$router.push({ path: this.redirect || '/' })
@@ -197,6 +203,10 @@ $light_gray:#eee;
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
+.el-button--primary{
+  background-color:   rgba(0, 0, 0, 0.1);
+  border-color:   rgba(0, 0, 0, 0.1);
+}
 .login-container {
   position: fixed;
   height: 100%;
@@ -256,5 +266,6 @@ $light_gray:#eee;
   .btn-login{
     float: right;
   }
+
 }
 </style>

@@ -8,7 +8,8 @@
                   </el-form-item>
                   <el-form-item label="简介：" prop="introduce">
                       <el-input type="textarea"
-                      :autosize="{ minRows: 1, maxRows: 6}"
+                      :autosize="{ minRows: 6, maxRows: 6}"
+                       resize='none'
                        v-model="uploadForm.introduce"></el-input>
                   </el-form-item>
                   <el-form-item label="选择分类：" prop="type">
@@ -33,7 +34,8 @@
                   <el-form-item label="链接网址：" prop="link">
                         <el-input 
                         type="textarea"
-                        :autosize="{ minRows: 1, maxRows: 2}"
+                        :autosize="{ minRows: 2, maxRows: 2}"
+                        resize="none"
                         v-model="uploadForm.link" ></el-input>
                   </el-form-item>
                   <el-form-item label="分享密码：" prop="pwdRadio">
@@ -63,12 +65,11 @@
                     hide-required-asterisk="false" class="cover-image">
                       <my-upload ref="uploader" field="file"
                       enctype="multipart/form-data"
-                      :langExt="zh"
                       @crop-success="cropSuccess"
                       v-model="show"
                       :no-circle="true"
-                      :width="150"
-                      :height="150"
+                      :width="108"
+                      :height="140"
                       
                       img-format="png"></my-upload>
                       <el-button size="small"
@@ -144,7 +145,7 @@ export default {
           },
           options: [{
           value: 'books',
-          label: '书籍库',
+          label: '书籍专区',
           children: [{
             value: 'literature',
             label: '文学历史'
@@ -163,17 +164,26 @@ export default {
           },
           {
             value: 'others',
-            label: '其他类'
+            label: '其他书籍'
           }]
         },{
           value: 'videos',
-          label: '视频库',
+          label: '视频专区',
           children: [{
             value: 'movies',
             label: '电影'
           }, {
             value: 'teleplay',
             label: '电视剧'
+          }, {
+            value: 'ITvideo',
+            label: 'IT视频'
+          }, {
+            value: 'interest',
+            label: '兴趣视频'
+          }, {
+            value: 'others',
+            label: '其他视频'
           }]
         }],
         selectedOptions: ['books', 'literature'],
@@ -193,17 +203,17 @@ export default {
             }
         ],
         show:false,
-        withCredentials:true,
-        params:{
-          size:5*1024*1024
-        },
-        headers:{
-          smail:'11'
-        },
-        zh:{
-          preview:'预览'
-        },
-        uploadImgUrl:'',
+        // withCredentials:true,
+        // params:{
+        //   size:5*1024*1024
+        // },
+        // headers:{
+        //   smail:'11'
+        // },
+        // zh:{
+        //   preview:'预览'
+        // },
+        // uploadImgUrl:'',
         detailRuleForm:{
           coverImg:''
         }
@@ -217,8 +227,9 @@ export default {
             console.log('onSubmit 001')
           this.$refs['uploadForm'].validate((valid) => {
             if (valid) {
-              let datas = this.uploadForm
-              datas.userid = localStorage.getItem('userid')
+              let datas = this.uploadForm;
+              datas.userid = localStorage.getItem('userid');
+              datas.coverimg = this.detailRuleForm.coverImg;
               console.log('onSubmit 002')
               console.log(datas)
               uploadForm(datas).then((res) => {
@@ -227,10 +238,10 @@ export default {
                     message:res.msg,
                     type:'success'
                   })
+                  this.$refs['uploadForm'].resetFields();
                 }
               }).catch((err) => {
                 console.log('上传 err')
-                console.log(err)
               }) 
               
             } else {
@@ -248,11 +259,11 @@ export default {
         cropSuccess(coverImg,field) {
           this.detailRuleForm.coverImg = coverImg;
 
-          upImg({'img':coverImg}).then(res => {
+          // upImg({'img':coverImg}).then(res => {//上传 图片
 
-          }).catch(err => {
+          // }).catch(err => {
 
-          })
+          // })
         },
         
     }
@@ -263,14 +274,16 @@ export default {
 .upload-container{
   background-color: #FFF;
   margin: 20px;
+  padding: 40px;
   height: 100%;
+  border: 1px solid #E9EEF3;
   // margin: 30px 30px 0;
     .upload-left{
-        padding:60px 0 0 100px;
+        // padding:60px 0 0 100px;
         // margin-right: 40px;
     }
     .upload-right{
-        padding-top: 60px;
+        // padding-top: 60px;
         padding-left:30px;
     }
     .cover-image{
@@ -282,8 +295,8 @@ export default {
         position: absolute;
         top: 0;
         right: 0;
-        width: 160px;
-        height: 160px;
+        width: 120px;
+        height: 150px;
         
         box-sizing: border-box;
         padding:4px;
@@ -293,8 +306,8 @@ export default {
         div{
           position: absolute;
           color: #d9d9d9;
-          top:66px;
-          left:62px;
+          top:60px;
+          left:43px;
         }
        
       }

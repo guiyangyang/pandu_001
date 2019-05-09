@@ -5,7 +5,8 @@
             <el-row>
                 <el-col :span="6" v-for="(book,index) in bookLists" :key="index" >
                     <div class="book-col">
-                        <div><img :src="'/static/images/books/'+book.img" alt=""></div>
+                        <div class="div-img"><img :src="book.img" alt=""></div>
+                        <!-- <div><img :src="'/static/images/books/'+book.img" alt=""></div> -->
                         <div class="book-name" :title="book.title">{{book.title}}</div>
                         <div class="bookbtn">
                             <span @click="getDetails(index)">详情</span>
@@ -35,7 +36,7 @@
             width="30%">
             <div class="dialogdetail-box">
                 <div>
-                    <img src="../../../static/images/books/jd.jpg" alt="">
+                    <img :src="getBookList.img" alt="">
                 </div>
                 <div>
                     <div class="title">标题：<span>{{getBookList.title}}</span></div>
@@ -92,7 +93,7 @@
 </template>
 <script>
 import axios from 'axios'
-import { getLiterature, getLatestShare, addShareNum, shareRank } from '@/api/books'
+import { getBooks, getLatestShare, addShareNum, shareRank } from '@/api/books'
 import {dateTimeFormatter , dateFormatter} from '@/utils/public'
 export default {
     name:'BooksVue',
@@ -199,12 +200,12 @@ this.dataInit();
             })
         },
         dataInit (){
-            this.getLiteratureList()
+            this.getBookLists()
             this.getLatestShareList()
             this.getShareRankList()
         },
-        getLiteratureList() {
-            getLiterature(this.param).then((res) => {
+        getBookLists() {
+            getBooks(this.param).then((res) => {
                 if(res.status == '200000'){
                     this.bookLists = res.result.docs;
                     this.bookLists.forEach((item,index) => {
@@ -254,13 +255,13 @@ this.dataInit();
         handleCurrentChange(val) {//分页
            console.log(`当前页数：${val}`)
            this.param.pagenum = val;
-           this.getLiteratureList();
+           this.getBookLists();
         },
         searchBook() {
             let searchContent = this.param.searchContent.trim();
             if(searchContent == '') return false;
             this.param.pagenum = 1;
-            this.getLiteratureList();
+            this.getBookLists();
         
         },
         shareBook(index) {
@@ -284,31 +285,21 @@ this.dataInit();
 <style lang="scss" scoped>
 $fontColor:#909399;
 .literature-box {
-    // border:1px solid red;
     padding:20px;
-    // padding-left: 0;
-    // background-color: #E9EEF3;
     font-family: Arial;
     font-size: 14px;
     
 }
 aside.el-aside {
-    // background-color: #fff;
     color: #333;
     width: 240px !important;
     padding: 14px;
-    // text-align: center;
-    // line-height: 200px;
     border:1px solid #E9EEF3;
     background-color: #fff;
-    // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
 }
 
 .el-main {
-    // background-color: #fff;
     color: #333;
-    // text-align: center;
-    // line-height: 160px;
     margin-right: 20px;
     border:1px solid #E9EEF3;
     position: relative;
@@ -317,13 +308,17 @@ aside.el-aside {
 }
 .book-col{
     width: 150px;
-    // background: #cccccc;
     height: 200px;
     overflow: hidden;
     text-align: center;
-    // :hover{
-    //     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
-    // }
+    .div-img{
+    //   background-color: #f9f8fc;
+    margin-bottom: 4px;
+    }
+    img{
+// box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
+    }
 }
 .book-name{
     overflow: hidden;
@@ -346,8 +341,6 @@ aside.el-aside {
     }
 }
 .fen-page{
-    // text-align: right;
-    // margin-top: 20px;
     position: absolute;
     right: 10px;
     bottom: 10px;
@@ -377,7 +370,9 @@ aside.el-aside {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-
+  }
+  div:hover{
+      color:#F16B6F;
   }
 }
 .appreciate{
@@ -398,9 +393,12 @@ aside.el-aside {
     justify-content: content;
     align-items: flex-start;
     margin-top: 20px;
+    img{
+        box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+        margin-right: 16px;
+    }
     .title{
         font-size: 16px;
-        // color: #ccc;
     }
     .introduce{
         display: flex;

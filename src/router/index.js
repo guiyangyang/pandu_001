@@ -31,10 +31,13 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/dashboard',
     name: 'Dashboard',
-    hidden: true,
+    alwaysShow: true,
+    // hidden: true,
+    meta: { title: 'dashboard', icon: 'excel' },
     children: [{
       path: 'dashboard',
-      component: () => import('@/views/dashboard/index')
+      component: () => import('@/views/dashboard/index'),
+      meta: { title: 'dashboard', icon: 'excel' },
     }]
   },
   {
@@ -42,7 +45,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/books/literature',
     name: 'Books',
-    meta: { title: '书籍专区', icon: 'example' },
+    meta: { title: '书籍专区', icon: 'excel' },
     children: [
       {
         path: 'literature',
@@ -54,25 +57,25 @@ export const constantRouterMap = [
         path: 'novel',
         name: 'Novel',
         component: () => import('@/views/books/novel'),
-        meta: { title: '小说传记', icon: 'table' }
+        meta: { title: '小说传记', icon: 'list' }
       },
       {
         path: 'technology',
         name: 'technology',
         component: () => import('@/views/books/technology'),
-        meta: { title: '科技时尚', icon: 'tree' }
+        meta: { title: '科技时尚', icon: 'list' }
       },
       {
         path: 'education',
         name: 'Education',
         component: () => import('@/views/books/education'),
-        meta: { title: '教育哲学', icon: 'table' }
+        meta: { title: '教育哲学', icon: 'list' }
       },
       {
         path: 'others',
         name: 'Others',
         component: () => import('@/views/books/others'),
-        meta: { title: '其他类', icon: 'table' }
+        meta: { title: '其他书籍', icon: 'list' }
       },
       //education
     ]
@@ -82,37 +85,37 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/videos/movies',
     name: 'Videos',
-    meta: { title: '视频专区', icon: 'example' },
+    meta: { title: '视频专区', icon: 'dashboard' },
     children: [
       {
         path: 'movies',
         name: 'Movies',
         component: () => import('@/views/videos/movies'),
-        meta: { title: '电影', icon: 'table' }
+        meta: { title: '电影', icon: 'list' }
       },
       {
-        path: 'tvplay',
-        name: 'Tvplay',
-        component: () => import('@/views/videos/tvplay'),
-        meta: { title: '电视剧', icon: 'table' }
+        path: 'teleplay',
+        name: 'Teleplay',
+        component: () => import('@/views/videos/teleplay'),
+        meta: { title: '电视剧', icon: 'list' }
       },
       {
         path: 'ITvideo',
         name: 'ITvideo',
         component: () => import('@/views/videos/ITvideo'),
-        meta: { title: 'IT视频', icon: 'tree' }
+        meta: { title: 'IT视频', icon: 'list' }
       },
       {
         path: 'interest',
         name: 'Interest',
         component: () => import('@/views/videos/interest'),
-        meta: { title: '兴趣视频', icon: 'table' }
+        meta: { title: '兴趣视频', icon: 'list' }
       },
       {
         path: 'others',
         name: 'Others',
         component: () => import('@/views/videos/others'),
-        meta: { title: '其他类', icon: 'table' }
+        meta: { title: '其他视频', icon: 'list' }
       },
       //education
     ]
@@ -125,9 +128,23 @@ export const constantRouterMap = [
         path: 'index',
         name: 'Upload',
         component: () => import('@/views/upload/index'),
-        meta: { title: '上传分享', icon: 'form' }
+        meta: { title: '上传专区', icon: 'form' }
       }
     ]
+  },
+  {
+    path: '/person',
+    component: Layout,
+    redirect: '/person/personData',
+    name: 'person',
+    // alwaysShow: true,
+    hidden: true,
+    meta: { title: '个人资料', icon: 'excel' },
+    children: [{
+      path: 'personData',
+      component: () => import('@/views/person/personData'),
+      // meta: { title: '个人资料', icon: 'excel' },
+    }]
   },
   { path: '*', redirect: '/404', hidden: true }
 ]

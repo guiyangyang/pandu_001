@@ -50,3 +50,10 @@ export function logout(token) {
     }
   })
 }
+export function modify(params) {
+  return request({
+    url: '/apis/users/modify',
+    method: 'post',
+    data:params
+  })
+}

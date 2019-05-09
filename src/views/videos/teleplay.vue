@@ -93,7 +93,7 @@
 </template>
 <script>
 import axios from 'axios'
-import { getBooks, getLatestShare, addShareNum, shareRank } from '@/api/books'
+import { getVideos, getLatestShare, addShareNum, shareRank } from '@/api/videos'
 import {dateTimeFormatter , dateFormatter} from '@/utils/public'
 export default {
     name:'BooksVue',
@@ -106,7 +106,7 @@ export default {
           param:{
               pagenum:1,
               pagesize:12,
-              searchType:'novel',
+              searchType:'teleplay',
               searchContent:''
           },
           currentPage:1,
@@ -137,12 +137,12 @@ export default {
             })
         },
         dataInit (){
-            this.getBookLists()
+            this.getVideoLists()
             this.getLatestShareList()
             this.getShareRankList()
         },
-        getBookLists() {
-            getBooks(this.param).then((res) => {
+        getVideoLists() {
+            getVideos(this.param).then((res) => {
                 if(res.status == '200000'){
                     this.bookLists = res.result.docs;
                     this.bookLists.forEach((item,index) => {
@@ -187,13 +187,13 @@ export default {
         },
         handleCurrentChange(val) {//分页
            this.param.pagenum = val;
-           this.getBookLists();
+           this.getVideoLists();
         },
         searchBook() {
             let searchContent = this.param.searchContent.trim();
             if(searchContent == '') return false;
             this.param.pagenum = 1;
-            this.getBookLists();
+            this.getVideoLists();
         
         },
         shareBook(index) {

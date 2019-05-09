@@ -1,13 +1,5 @@
 import request from "@/utils/request"
 
-export function bkLiteratures(token) {
-    return request({
-        url:'/apis/books/literature',
-        method:'get',
-        params:{token}
-    })
-}
-
 export function uploadForm(datas){
     return request({
         url:'/apis/uploadForm',
@@ -15,7 +7,7 @@ export function uploadForm(datas){
         data:datas
     })
 }
-export function upImg(datas){
+export function upImg(datas){  //单独 上传图片
     return request({
         url:'/apis/uploadForm/upImg',
         method:'post',
