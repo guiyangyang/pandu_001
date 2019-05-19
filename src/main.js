@@ -14,6 +14,7 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
+import '@/assets/styles/icon.css'
 
 /**
  * This project originally used easy-mock to simulate data,

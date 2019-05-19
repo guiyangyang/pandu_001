@@ -4,8 +4,8 @@
       <el-button type="primary" @click='ceshi'>测试请求</el-button>
     </div> -->
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-      <div class="title">盘&nbsp;&nbsp;&nbsp;&nbsp;度 </div>
-      <div class="title-tip">共享美好时光</div>
+      <div class="title">悦 度 空 间</div>
+      <div class="title-tip">给你主宰自己的力量</div>
       <el-form-item prop="userphone">
         <span class="svg-container">
           <svg-icon icon-class="user" />
@@ -205,7 +205,8 @@ $dark_gray:#889aa4;
 $light_gray:#eee;
 .el-button--primary{
   background-color:   rgba(0, 0, 0, 0.1);
-  border-color:   rgba(0, 0, 0, 0.1);
+  border:1px solid  rgba(255, 255, 255, 0.1);
+  color: #eee;
 }
 .login-container {
   position: fixed;

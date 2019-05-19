@@ -10,7 +10,7 @@
                         <div class="book-name" :title="book.title">{{book.title}}</div>
                         <div class="bookbtn">
                             <span @click="getDetails(index)">详情</span>
-                            <span @click.self='getBook(index)'>获取</span>
+                            <span @click.self='getBook(index)'>阅读</span>
                         </div>
                     </div>
                 </el-col>
@@ -93,11 +93,65 @@
 </template>
 <script>
 import axios from 'axios'
-import { getVideos, getLatestShare, addShareNum, shareRank } from '@/api/videos'
+import { getBooks, getLatestShare, addShareNum, shareRank } from '@/api/books'
 import {dateTimeFormatter , dateFormatter} from '@/utils/public'
 export default {
     name:'BooksVue',
     data () {
+        // 本地 测试 数据
+        const bookDatas = [
+              {
+                  bookid:'books-literature-1', 
+                  img:'rshhh.jpg',
+                  title:'人生海海',
+                  link:'http://www.1539.ink',
+                  password:'111'
+              },
+              {
+                  bookid:'books-literature-2', 
+                  img:'zhxhy.jpg',
+                  title:'知行合一知行合一知行合一知行合一知行合一知行合一',
+                  link:'http://www.1539.ink',
+                  password:'222'
+              },
+              {
+                  bookid:'books-literature-3', 
+                  img:'ajsqn.jpg',
+                  title:'埃及四千年',
+                  link:'http://www.1539.ink',
+                  password:'333'
+              },
+              {
+                  img:'jd.jpg',
+                  title:'简单',
+                  link:'http://www.1539.ink',
+                  password:'333'
+              },
+              {
+                  img:'jdsxdsndq.jpg',
+                  title:'决定上限是你的情',
+                  link:'http://www.1539.ink',
+                  password:'333'
+              },
+              {
+                  img:'lj.jpg',
+                  title:'联结',
+                  link:'http://www.1539.ink',
+                  password:'333'
+              },
+              {
+                  img:'rshhh.jpg',
+                  title:'人生海海',
+                  link:'http://www.1539.ink',
+                  password:'333'
+              },
+              {
+                  img:'yjzs.jpg',
+                  title:'易经杂说',
+                  link:'http://www.1539.ink',
+                  password:'333'
+              }
+          ]
         return {
           dialogVisible:false,
           dialogDetail:false,
@@ -106,7 +160,7 @@ export default {
           param:{
               pagenum:1,
               pagesize:12,
-              searchType:'interest',
+              searchType:'literature',
               searchContent:''
           },
           currentPage:1,
@@ -118,7 +172,12 @@ export default {
         
     },
     created() {
-      this.dataInit();
+this.dataInit();
+    },
+    computed:{
+    //    total() {dateFormatter
+
+    //    }
     },
     filters:{
       dateToFormatter(val) {
@@ -126,23 +185,33 @@ export default {
       }
     },
     mounted (){
+    //   this.dataInit();
+
     },
     methods:{
         getBook (index) {
-            this.getBookList = this.bookLists[index];
-            this.dialogVisible = true; 
-            addShareNum({'id':this.getBookList.id}).then(res => {
-            }).catch(err => {
-                console.log('err')
+            this.$router.push({
+                path:'/read/openRead',
+                query:{
+                    id:'123'
+                }
             })
+            // this.getBookList = this.bookLists[index];
+            // this.dialogVisible = true; 
+            // console.log(this.getBookList.id)
+            // addShareNum({'id':this.getBookList.id}).then(res => {
+
+            // }).catch(err => {
+            //     console.log('err')
+            // })
         },
         dataInit (){
-            this.getVideoLists()
+            this.getBookLists()
             this.getLatestShareList()
             this.getShareRankList()
         },
-        getVideoLists() {
-            getVideos(this.param).then((res) => {
+        getBookLists() {
+            getBooks(this.param).then((res) => {
                 if(res.status == '200000'){
                     this.bookLists = res.result.docs;
                     this.bookLists.forEach((item,index) => {
@@ -157,6 +226,7 @@ export default {
                         message:'暂无数据，请稍后再试！',
                         type:'success'
                     })
+                    // console.log(res.msg)
                 }
             }).catch((err) => {
                 console.log('err')
@@ -165,6 +235,8 @@ export default {
         getLatestShareList() {
           getLatestShare({size:10}).then((res) => {
               if(res.status == '200000'){
+                console.log('最新 分享')
+                console.log(res)
                 this.latestShareList = res.result.data;
               }
           }).catch(err => {
@@ -183,17 +255,19 @@ export default {
         getDetails(index) {
             this.getBookList = this.bookLists[index];
             this.dialogDetail = true;
+            console.log('点击详情')
             this.getShareRankList();
         },
         handleCurrentChange(val) {//分页
+           console.log(`当前页数：${val}`)
            this.param.pagenum = val;
-           this.getVideoLists();
+           this.getBookLists();
         },
         searchBook() {
             let searchContent = this.param.searchContent.trim();
             if(searchContent == '') return false;
             this.param.pagenum = 1;
-            this.getVideoLists();
+            this.getBookLists();
         
         },
         shareBook(index) {
@@ -302,7 +376,6 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-
   }
   div:hover{
       color:#F16B6F;
@@ -347,7 +420,6 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
     }
 }
 </style>
-
 
 
 

@@ -36,11 +36,13 @@ export default {
 <style scoped>
 .app-main {
   /*50 = navbar  */
-  min-height: calc(100vh - 50px);
+  min-height: calc(100vh);
   position: relative;
   overflow: hidden;
   padding-top: 50px;
+  /* margin-top: 50px; */
   background-color: #f9f8fc;
+  box-sizing: border-box;
   color: #303133;
 }
 </style>

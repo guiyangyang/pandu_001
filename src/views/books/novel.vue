@@ -217,7 +217,7 @@ export default {
 <style lang="scss" scoped>
 $fontColor:#909399;
 .literature-box {
-    padding:20px;
+    padding:10px;
     font-family: Arial;
     font-size: 14px;
     
@@ -232,7 +232,7 @@ aside.el-aside {
 
 .el-main {
     color: #333;
-    margin-right: 20px;
+    margin-right: 10px;
     border:1px solid #E9EEF3;
     position: relative;
     background-color: #fff;

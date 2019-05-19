@@ -121,6 +121,28 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/read',
+    component: Layout,
+    redirect: '/read/readList',
+    name: 'Read',
+    meta: { title: '阅读专区', icon: 'dashboard' },
+    children: [
+      {
+        path: 'readList',
+        name: 'ReadList',
+        component: () => import('@/views/read/readList'),
+        meta: { title: '阅读专区', icon: 'form' }
+      },
+      {
+        path: 'openRead',
+        name: 'OpenRead',
+        hidden:true,
+        component: () => import('@/views/read/openRead'),
+        meta: { title: '阅读专区', icon: 'form' }
+      }
+    ]
+  },
+  {
     path: '/upload',
     component: Layout,
     children: [
@@ -129,6 +151,18 @@ export const constantRouterMap = [
         name: 'Upload',
         component: () => import('@/views/upload/index'),
         meta: { title: '上传专区', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/icon',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Icon',
+        component: () => import('@/views/icon/index'),
+        meta: { title: 'icon图标', icon: 'form' }
       }
     ]
   },
