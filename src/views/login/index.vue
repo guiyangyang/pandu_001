@@ -6,11 +6,11 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <div class="title">悦 度 空 间</div>
       <div class="title-tip">给你主宰自己的力量</div>
-      <el-form-item prop="userphone">
+      <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input v-model="loginForm.userphone" name="userphone" type="text" auto-complete="on" placeholder="请输入手机号" />
+        <el-input v-model="loginForm.username" type="text" auto-complete="on" placeholder="请输入用户名" />
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
@@ -36,43 +36,29 @@
           登录
         </el-button>
       </el-form-item>
-      <div class="tips">
+      <!-- <div class="tips">
         <span style="margin-right:20px;">userphone: 15510370703</span>
         <span> password: 1234</span>
-      </div>
+      </div> -->
     </el-form>
   </div>
 </template>
 
 <script>
-// import { isvaliduserphone } from '@/utils/validate'
+import { validatePassword,validateUsername } from '@/utils/validate'
 // import Cookies from 'js-cookie'
 import VerifyCode from '@/components/verifyCode';
 export default {
   name: 'Login',
   data() {
-    const validateuserphone = (rule, value, callback) => {
-      if (!(/^1[34578]\d{9}$/.test(value))) {
-        callback(new Error('请输入正确的手机号'))
-      } else {
-        callback()
-      }
-    }
-    const validatePass = (rule, value, callback) => {
-      if (value.length < 4) {
-        callback(new Error('密码不能小于4位'))
-      } else {
-        callback()
-      }
-    }
     return {
       loginForm: {
-        userphone: '',
+        username: '',
         password: ''
       },
       loginRules: {
-        userphone: [{ required: true, trigger: 'blur', validator: validateuserphone }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }]
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       loading: false,
       loadingR:false,
@@ -128,7 +114,8 @@ export default {
             }else{
               this.$message({
                 message:res.msg,
-                type:'error'
+                type:'error',
+                showClose:true
               })
             }
             

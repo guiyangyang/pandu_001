@@ -1,37 +1,21 @@
 import request from '@/utils/request'
 
-export function login(userphone, password) {
+export function login(params) {
   return request({
     url: '/apis/users/login',
     method: 'post',
-    data: {
-      userphone,
-      password
-    }
+    data: params
   })
 }
-export function register(userphone, password) {
+export function register(params) {
   return request({
     url: '/apis/users/register',
     method: 'post',
-    data: {
-      userphone,
-      password
-    }
+    data: params
   })
 }
 
-// export function ceShi(){
 
-//   return request({
-//     url:'/apis/users/login',
-//     method:'post',
-//     data:{
-//       userphone:'xiaoyang',
-//       password:'1234'
-//     }
-//   })
-// }
 
 export function getInfo(token) {
   return request({

@@ -27,9 +27,9 @@ const user = {
   actions: {
     // 登录 手机号
     Login({ commit }, userInfo) {
-      const userphone = userInfo.userphone.trim()
+      // const userphone = userInfo.userphone.trim()
       return new Promise((resolve, reject) => {
-        login(userphone, userInfo.password).then(response => {
+        login(userInfo).then(response => {
           // console.log('response')
           // console.log(response)
           // const data = response.data
@@ -45,9 +45,9 @@ const user = {
     },
 
     Register({ commit }, userInfo) {
-      const userphone = userInfo.userphone.trim()
+      // const userphone = userInfo.userphone.trim()
       return new Promise((resolve, reject) => {
-        register(userphone, userInfo.password).then(response => {
+        register(userInfo).then(response => {
           // const data = response.data.result
           // console.log('response.data.result.token')
           // console.log(response.data.result.token)
