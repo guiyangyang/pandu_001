@@ -29,10 +29,10 @@ export const constantRouterMap = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/books',
     name: 'Dashboard',
     alwaysShow: true,
-    // hidden: true,
+    hidden: true,
     meta: { title: 'dashboard', icon: 'excel' },
     children: [{
       path: 'dashboard',
@@ -51,7 +51,7 @@ export const constantRouterMap = [
         path: 'literature',
         name: 'Literature',
         component: () => import('@/views/books/literature'),
-        meta: { title: '文学历史', icon: 'table' }
+        meta: { title: '文学历史', icon: 'list' }
       },
       {
         path: 'novel',
@@ -125,47 +125,57 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/read/readList',
     name: 'Read',
-    meta: { title: '阅读专区', icon: 'dashboard' },
+    meta: { title: '阅读专区', icon: 'example' },
     children: [
       {
         path: 'readList',
         name: 'ReadList',
         component: () => import('@/views/read/readList'),
-        meta: { title: '阅读专区', icon: 'form' }
+        meta: { title: '阅读专区', icon: 'example' }
       },
       {
         path: 'openRead',
         name: 'OpenRead',
         hidden:true,
         component: () => import('@/views/read/openRead'),
-        meta: { title: '阅读专区', icon: 'form' }
+        meta: { title: '阅读专区', icon: 'list' }
       }
     ]
   },
   {
     path: '/upload',
     component: Layout,
+    redirect: '/upload/index',
+    name: 'Upload',
+    meta: { title: '上传专区', icon: 'guide' },
     children: [
       {
         path: 'index',
-        name: 'Upload',
+        name: 'UploadIndex',
+        hidden:true,
         component: () => import('@/views/upload/index'),
-        meta: { title: '上传专区', icon: 'form' }
-      }
+        meta: { title: '上传网盘资源', icon: 'list' }
+      },
+      // {
+      //   path: 'uploadEpub',
+      //   name: 'UploadEpub',
+      //   component: () => import('@/views/upload/uploadEpub'),
+      //   meta: { title: '上传本地书籍', icon: 'list' }
+      // }
     ]
   },
-  {
-    path: '/icon',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Icon',
-        component: () => import('@/views/icon/index'),
-        meta: { title: 'icon图标', icon: 'form' }
-      }
-    ]
-  },
+  // {
+  //   path: '/icon',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'Icon',
+  //       component: () => import('@/views/icon/index'),
+  //       meta: { title: 'icon图标', icon: 'form' }
+  //     }
+  //   ]
+  // },
   {
     path: '/person',
     component: Layout,

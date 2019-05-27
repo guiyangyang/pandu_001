@@ -101,7 +101,6 @@ export default {
             let username = localStorage.getItem('username');
             let userphone = localStorage.getItem('userphone');
             let email = localStorage.getItem('email');
-            console.log(userid)
             if(!userid){
 
              return false;
@@ -120,7 +119,6 @@ export default {
         onSubmit() {
           this.$refs['form'].validate(valid => {
               if(valid){
-                  console.log('验证 通过')
                 if(this.form.password !== this.form.confirmpwd){
                     this.$message({
                         message:'新密码与确认密码不一致',
@@ -128,9 +126,7 @@ export default {
                     })
                     return false;
                 }else{
-                    console.log(this.form)
                     modify(this.form).then(res => {
-                        console.log(res)
                     }).catch(err => {
                         console.log('err')
                     })

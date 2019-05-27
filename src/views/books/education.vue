@@ -5,7 +5,10 @@
             <el-row>
                 <el-col :span="6" v-for="(book,index) in bookLists" :key="index" >
                     <div class="book-col">
-                        <div class="div-img"><img :src="book.img" alt=""></div>
+                        <div class="div-img">
+                            <img :src="book.img" v-if="book.img.length > 10" alt="">
+                            <div v-else class="text-box" ><span>{{book.type[1]}}</span></div>
+                        </div>
                         <!-- <div><img :src="'/static/images/books/'+book.img" alt=""></div> -->
                         <div class="book-name" :title="book.title">{{book.title}}</div>
                         <div class="bookbtn">
@@ -66,7 +69,7 @@
         </el-main>
         <el-aside class="aside-container">
             <div>
-                <el-input placeholder="请输入内容"
+                <el-input placeholder="请输入关键词"
                  v-model="param.searchContent" 
                  clearable
                  size="small" >
@@ -220,6 +223,23 @@ $fontColor:#909399;
     padding:10px;
     font-family: Arial;
     font-size: 14px;
+    .text-box{
+        width: 120px;
+        height: 150px;
+        border: 1px solid #eee;
+        box-sizing: border-box;
+        margin-left: 15px;
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        background: #8CD790;
+        span{
+            display: block;
+            margin-top: 50px;
+            font-size: 20px;
+            color: transparent;
+            -webkit-text-stroke: 1px #f6f6f6;
+            letter-spacing: 0.04em;
+        }
+    }
     
 }
 aside.el-aside {
@@ -249,7 +269,7 @@ aside.el-aside {
     }
     img{
 // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
+box-shadow: 0 2px 12px rgba(0, 0, 0, .32), 0 0 6px rgba(0, 0, 0, .04)
     }
 }
 .book-name{
@@ -327,7 +347,7 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
     align-items: flex-start;
     margin-top: 20px;
     img{
-        box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, .32), 0 0 6px rgba(0, 0, 0, .04);
         margin-right: 16px;
     }
     .title{

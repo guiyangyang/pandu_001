@@ -42,7 +42,6 @@ export default {
       // this.$store.dispatch('ToggleSideBar')
     },
     logout() {
-      console.log('dianji logout')
       this.$store.dispatch('LogOut').then(() => {
         location.reload() // 为了重新实例化vue-router对象 避免bug
       })

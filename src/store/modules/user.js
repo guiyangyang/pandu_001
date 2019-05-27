@@ -30,11 +30,6 @@ const user = {
       // const userphone = userInfo.userphone.trim()
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
-          // console.log('response')
-          // console.log(response)
-          // const data = response.data
-          // console.log('response.data')
-          // console.log(response.data)
           setToken(response.result.token)
           commit('SET_TOKEN', response.result.token)
           resolve(response)
@@ -92,10 +87,7 @@ const user = {
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
-        console.log('logout 001')
-        console.log(state.token)
         logout(state.token).then(() => {
-          console.log('logout 002')
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           removeToken()

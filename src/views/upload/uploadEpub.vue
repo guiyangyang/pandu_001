@@ -22,7 +22,32 @@
                         v-model="uploadForm.type"
                       ></el-cascader>
                   </el-form-item>
-                  <el-form-item label="网盘类型：" prop="linktype">
+                  <el-form-item label="本地书籍：" prop="linktype">
+                      <el-row>
+                          <el-col :span="16">
+                              <el-input v-model="uploadForm.title" 
+                                clearable
+                                style="width:200px;"></el-input>
+                          </el-col>
+                          <el-col :span="8">
+                        <el-upload
+                            class="upload-demo"
+                            ref="upload"
+                            action=""
+                            :limit="1"
+                            :file-list="fileList"
+                            :before-upload="beforeUpload"
+                            style="margin-top:-2px;">
+                            <el-button slot="trigger" size="small" type="primary" plain>选取文件</el-button>
+                            <!-- <div slot="tip" class="el-upload__tip">只能上传excel文件，且不超过100MB</div>
+                            <div slot="tip" class="el-upload-list__item-name">{{fileName}}</div> -->
+                        </el-upload> 
+                          </el-col>
+                      </el-row>
+                        
+                        
+                  </el-form-item>
+                  <!-- <el-form-item label="网盘类型：" prop="linktype">
                         <el-select v-model="uploadForm.linktype"  placeholder="请选择">
                             <el-option
                             v-for="item in linkTypeLists"
@@ -52,10 +77,12 @@
                             <el-radio :label="7">7天</el-radio>
                             <el-radio :label="1">1天</el-radio>
                         </el-radio-group>
-                  </el-form-item>
+                  </el-form-item> -->
                    <el-form-item>
                         <el-button type="primary" @click="onSubmit" size="small">立即上传</el-button>
                         <el-button size="small" @click="resetForm">取消重置</el-button>
+                        <el-button type="primary" @click="submitUpload" size="small">上传书籍</el-button>
+                        
                     </el-form-item>
               </el-form>
             </el-col>
@@ -92,7 +119,7 @@
     </div>
 </template>
 <script>
-import { uploadForm, upImg } from "@/api/uploadForm"
+import { uploadForm, upImg,uploadEpub } from "@/api/uploadForm"
 import myUpload from "vue-image-crop-upload";
 
 export default {
@@ -108,12 +135,14 @@ export default {
         }
       }
         return {
-          uploadForm:{
+            fileList:[],
+            fileName:'',
+            uploadForm:{
             title:'',
             introduce:'',
             type:['books', 'literature'],
             linktype:'bd',
-            link:'http://yuedu.1539.ink',
+            link:'http://www.baidu.com',
             password:'',
             pwdRadio:'1',
             effecttime:0,
@@ -167,26 +196,28 @@ export default {
             value: 'others',
             label: '其他书籍'
           }]
-        },{
-          value: 'videos',
-          label: '视频专区',
-          children: [{
-            value: 'movies',
-            label: '电影'
-          }, {
-            value: 'teleplay',
-            label: '电视剧'
-          }, {
-            value: 'ITvideo',
-            label: 'IT视频'
-          }, {
-            value: 'interest',
-            label: '兴趣视频'
-          }, {
-            value: 'others',
-            label: '其他视频'
-          }]
-        }],
+        },
+        // {
+        //   value: 'videos',
+        //   label: '视频专区',
+        //   children: [{
+        //     value: 'movies',
+        //     label: '电影'
+        //   }, {
+        //     value: 'teleplay',
+        //     label: '电视剧'
+        //   }, {
+        //     value: 'ITvideo',
+        //     label: 'IT视频'
+        //   }, {
+        //     value: 'interest',
+        //     label: '兴趣视频'
+        //   }, {
+        //     value: 'others',
+        //     label: '其他视频'
+        //   }]
+        // }
+        ],
         selectedOptions: ['books', 'literature'],
         checklinktype:null,
         linkTypeLists:[
@@ -204,6 +235,17 @@ export default {
             // }
         ],
         show:false,
+        // withCredentials:true,
+        // params:{
+        //   size:5*1024*1024
+        // },
+        // headers:{
+        //   smail:'11'
+        // },
+        // zh:{
+        //   preview:'预览'
+        // },
+        // uploadImgUrl:'',
         detailRuleForm:{
           coverImg:''
         }
@@ -212,41 +254,61 @@ export default {
     components:{
       myUpload
     },
-    mounted(){
-      this.addEpubOption();
-    },
     methods:{
-        addEpubOption() {
-          let name = localStorage.getItem('username');
-          console.log('name')
-          console.log(name)
-          if(name == '小羊001'){
-            this.options.push({
-          value: 'epubs',
-          label: '阅读专区',
-          children: [{
-            value: 'literature',
-            label: '文学历史'
-          }, 
-          {
-            value: 'novel',
-            label: '小说传记'
-          },
-          {
-            value: 'technology',
-            label: '科技时尚'
-          },
-          {
-            value: 'education',
-            label: '教育哲学'
-          },
-          {
-            value: 'others',
-            label: '其他书籍'
-          }]
-        })
+        beforeUpload(file){
+        this.files = file;
+        const extension = file.name.split('.')[1] === 'epub'
+        // const extension2 = file.name.split('.')[1] === 'xlsx'
+        const isLt2M = file.size / 1024 / 1024 < 20
+        if (!extension) {
+        this.$message.warning('上传书籍只能是epub格式!')
+        return
+        }
+        if (!isLt2M) {
+        this.$message.warning('上传书籍大小不能超过20MB!')
+        return
+        }
+        this.fileName = file.name;
+        return false // 返回false不会自动上传
+      },
+      submitUpload() {
+        if(this.fileName == ""){
+        this.$message.warning('请选择要上传的书籍！')
+        return false
+        }
+        let fileFormData = new FormData();
+        fileFormData.append('file', this.files, this.fileName);//filename是键，file是值，就是要传的文件，test.zip是要传的文件名
+        // fileFormData.append('uploadExplain', this.newUploadForm.uploadExplain);
+        // fileFormData.append('dept','this.newUploadForm.dept');
+        // fileFormData.append('operator', this.newUploadForm.operator);
+       
+        // return ;
+        uploadEpub(fileFormData).then(res => {
+          console.log(res)
+          if(res.data.code == '000000'){
+            this.$message({
+              message:'上传成功',
+              type:'success',
+              showClose:true
+            })
+            this.dialogVisibleAdd = false;
+          }else{
+            this.$message({
+              message:'上传失败',
+              type:'error',
+              showClose:true
+            })
+            this.fileName = '';
           }
-        },
+        }).catch(err => {
+            this.$message({
+              message:'上传失败',
+              type:'success',
+              showClose:true
+            })
+            this.fileName = '';
+        })
+      },
         onSubmit() {
           this.$refs['uploadForm'].validate((valid) => {
             if (valid) {

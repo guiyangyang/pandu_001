@@ -66,7 +66,7 @@
         </el-main>
         <el-aside class="aside-container">
             <div>
-                <el-input placeholder="请输入内容"
+                <el-input placeholder="请输入关键词"
                  v-model="param.searchContent" 
                  clearable
                  size="small" >
@@ -93,7 +93,7 @@
 </template>
 <script>
 import axios from 'axios'
-import { getBooks, getLatestShare, addShareNum, shareRank } from '@/api/books'
+import { getEpubs, getLatestShare, addShareNum, shareRank} from '@/api/epubs'
 import {dateTimeFormatter , dateFormatter} from '@/utils/public'
 export default {
     name:'BooksVue',
@@ -171,9 +171,9 @@ export default {
         }
         
     },
-    created() {
-this.dataInit();
-    },
+    // created() {
+    //   this.dataInit();
+    // },
     computed:{
     //    total() {dateFormatter
 
@@ -184,34 +184,24 @@ this.dataInit();
           return  dateFormatter(val)  
       }
     },
-    mounted (){
-    //   this.dataInit();
+    mounted() {
+        this.getEpubLists()
+        this.getLatestShareList()
+        this.getShareRankList()
 
     },
     methods:{
         getBook (index) {
+            let epubIdUrl = this.bookLists[index].id + '.epub';
             this.$router.push({
                 path:'/read/openRead',
                 query:{
-                    id:'123'
+                    id:epubIdUrl
                 }
             })
-            // this.getBookList = this.bookLists[index];
-            // this.dialogVisible = true; 
-            // console.log(this.getBookList.id)
-            // addShareNum({'id':this.getBookList.id}).then(res => {
-
-            // }).catch(err => {
-            //     console.log('err')
-            // })
         },
-        dataInit (){
-            this.getBookLists()
-            this.getLatestShareList()
-            this.getShareRankList()
-        },
-        getBookLists() {
-            getBooks(this.param).then((res) => {
+        getEpubLists() {
+            getEpubs(this.param).then((res) => {
                 if(res.status == '200000'){
                     this.bookLists = res.result.docs;
                     this.bookLists.forEach((item,index) => {
@@ -235,8 +225,6 @@ this.dataInit();
         getLatestShareList() {
           getLatestShare({size:10}).then((res) => {
               if(res.status == '200000'){
-                console.log('最新 分享')
-                console.log(res)
                 this.latestShareList = res.result.data;
               }
           }).catch(err => {
@@ -255,11 +243,9 @@ this.dataInit();
         getDetails(index) {
             this.getBookList = this.bookLists[index];
             this.dialogDetail = true;
-            console.log('点击详情')
             this.getShareRankList();
         },
         handleCurrentChange(val) {//分页
-           console.log(`当前页数：${val}`)
            this.param.pagenum = val;
            this.getBookLists();
         },
@@ -291,9 +277,17 @@ this.dataInit();
 <style lang="scss" scoped>
 $fontColor:#909399;
 .literature-box {
-    padding:10px;
-    font-family: Arial;
-    font-size: 14px;
+    // padding:10px;
+    // font-family: Arial;
+    // font-size: 14px;
+    background-color: #FFF;
+  padding: 40px;
+  border: 1px solid #E9EEF3;
+  position: absolute;
+  top: 70px;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
     
 }
 aside.el-aside {
@@ -323,7 +317,7 @@ aside.el-aside {
     }
     img{
 // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
+box-shadow: 0 2px 12px rgba(0, 0, 0, .32), 0 0 6px rgba(0, 0, 0, .04)
     }
 }
 .book-name{
@@ -400,7 +394,7 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
     align-items: flex-start;
     margin-top: 20px;
     img{
-        box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, .32), 0 0 6px rgba(0, 0, 0, .04);
         margin-right: 16px;
     }
     .title{

@@ -56,6 +56,7 @@ global.ePub = Epub;
 export default {
     data() {
       return {
+        epubRul:'',
         ifTitleAndMenuShow:false,
         fontSizeList:[
           {fontSize:12},
@@ -112,26 +113,26 @@ export default {
       MenuBar
     },
     mounted() {
+      this.epubRul = '/static/'+this.$route.query.id;
       this.showEpub();
+
+
       // let _this = this;
-      window.onresize = () => {
-        console.log('resize');
+      // window.onresize = () => {
         // document.getElementsByClassName('read-wrapper')[0].style.height='600px';
         // document.getElementsByClassName('read-wrapper')[0].style.width = '1000px';
         // window.reload();
         // _this.showEpub();
-        // console.log('resize')
         // if(_this.rendition){
         // }
-      }
+      // }
     },
     methods:{
         // 1. 电子书 解析 渲染
         showEpub() {
-          console.log('show')
+          let epubRul = this.epubRul;
           //1.1 生成 book
-          this.book = new Epub(DOWLOAD_URL)
-        //   console.log(this.book)
+          this.book = new Epub(epubRul);
           //1.2 生成 rendition
           // this.rendition = this.book.renderTo('read',{ method: "default", width: window.innerWidth,height: window.innerHeight })
            this.rendition = this.book.renderTo('read',{ method: "default", width:1120,height:600 })

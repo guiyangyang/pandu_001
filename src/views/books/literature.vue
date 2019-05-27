@@ -5,7 +5,11 @@
             <el-row>
                 <el-col :span="6" v-for="(book,index) in bookLists" :key="index" >
                     <div class="book-col">
-                        <div class="div-img"><img :src="book.img" alt=""></div>
+                        <div class="div-img">
+                            <img :src="book.img" v-if="book.img.length > 10" alt="">
+                            <div v-else class="text-box" ><span>{{book.type[1]}}</span></div>
+                        </div>
+                        
                         <!-- <div><img :src="'/static/images/books/'+book.img" alt=""></div> -->
                         <div class="book-name" :title="book.title">{{book.title}}</div>
                         <div class="bookbtn">
@@ -66,7 +70,7 @@
         </el-main>
         <el-aside class="aside-container">
             <div>
-                <el-input placeholder="请输入内容"
+                <el-input placeholder="请输入关键词"
                  v-model="param.searchContent" 
                  clearable
                  size="small" >
@@ -220,7 +224,6 @@ this.dataInit();
                         message:'暂无数据，请稍后再试！',
                         type:'success'
                     })
-                    // console.log(res.msg)
                 }
             }).catch((err) => {
                 console.log('err')
@@ -229,8 +232,6 @@ this.dataInit();
         getLatestShareList() {
           getLatestShare({size:10}).then((res) => {
               if(res.status == '200000'){
-                console.log('最新 分享')
-                console.log(res)
                 this.latestShareList = res.result.data;
               }
           }).catch(err => {
@@ -249,11 +250,9 @@ this.dataInit();
         getDetails(index) {
             this.getBookList = this.bookLists[index];
             this.dialogDetail = true;
-            console.log('点击详情')
             this.getShareRankList();
         },
         handleCurrentChange(val) {//分页
-           console.log(`当前页数：${val}`)
            this.param.pagenum = val;
            this.getBookLists();
         },
@@ -288,6 +287,24 @@ $fontColor:#909399;
     padding:10px;
     font-family: Arial;
     font-size: 14px;
+    .text-box{
+        width: 120px;
+        height: 150px;
+        border: 1px solid #eee;
+        box-sizing: border-box;
+        margin-left: 15px;
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        background: rgba(235, 224, 199, 1);
+        span{
+            display: block;
+            margin-top: 50px;
+            font-size: 20px;
+            color: transparent;
+            -webkit-text-stroke: 1px #c7a1a1;
+            letter-spacing: 0.04em;
+        }
+
+    }
     
 }
 aside.el-aside {
@@ -317,7 +334,7 @@ aside.el-aside {
     }
     img{
 // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
+box-shadow: 0 2px 12px rgba(0, 0, 0, .32), 0 0 6px rgba(0, 0, 0, .04)
     }
 }
 .book-name{
@@ -394,7 +411,7 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
     align-items: flex-start;
     margin-top: 20px;
     img{
-        box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, .32), 0 0 6px rgba(0, 0, 0, .04);
         margin-right: 16px;
     }
     .title{
