@@ -2,14 +2,14 @@ import request from '@/utils/request'
 
 export function login(params) {
   return request({
-    url: '/apis/users/login',
+    url: '/users/login',
     method: 'post',
     data: params
   })
 }
 export function register(params) {
   return request({
-    url: '/apis/users/register',
+    url: '/users/register',
     method: 'post',
     data: params
   })
@@ -27,7 +27,7 @@ export function getInfo(token) {
 
 export function logout(token) {
   return request({
-    url: '/apis/users/logout',
+    url: '/users/logout',
     method: 'post',
     data:{
       token:token
@@ -36,7 +36,7 @@ export function logout(token) {
 }
 export function modify(params) {
   return request({
-    url: '/apis/users/modify',
+    url: '/users/modify',
     method: 'post',
     data:params
   })

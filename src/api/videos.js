@@ -4,7 +4,7 @@ import request from "@/utils/request"
 //获取  文学历史  列表
 // export function getLiterature(param) {
 //     return request({
-//         url:'/apis/videos/getLiterature',
+//         url:'/videos/getLiterature',
 //         method:'post',
 //         data:param
 //     })
@@ -13,7 +13,7 @@ import request from "@/utils/request"
 // 获取 各类书籍 列表
 export function getVideos(param) {
     return request({
-        url:'/apis/videos/getVideos',
+        url:'/videos/getVideos',
         method:'post',
         data:param
     })
@@ -21,7 +21,7 @@ export function getVideos(param) {
 //最新分享
 export function getLatestShare(size) {
     return request({
-        url:'/apis/videos/getLatestShare',
+        url:'/videos/getLatestShare',
         method:'post',
         data:size
     })
@@ -29,7 +29,7 @@ export function getLatestShare(size) {
 //分享 次数
 export function addShareNum(param) {
     return request({
-        url:'/apis/videos/addShareNum',
+        url:'/videos/addShareNum',
         method:'post',
         data:param
     })
@@ -37,7 +37,7 @@ export function addShareNum(param) {
 //分享排行 Share rank
 export function shareRank(size) {
     return request({
-        url:'/apis/videos/shareRank',
+        url:'/videos/shareRank',
         method:'post',
         data:size
     })

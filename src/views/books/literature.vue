@@ -43,12 +43,15 @@
                     <img :src="getBookList.img" alt="">
                 </div>
                 <div>
-                    <div class="title">标题：<span>{{getBookList.title}}</span></div>
-                    <div class="introduce">
+                    <div class="detail-title">
+                        <div>标题：</div> 
+                        <div>{{getBookList.title}}</div>
+                    </div>
+                    <div class="detail-introduce">
                        <div> 简介：</div>
                        <div>{{getBookList.introduce}}</div>
                        </div>
-                    <div class="upload-time">上传时间:{{getBookList.uploadtime | dateToFormatter}}</div>
+                    <div class="upload-time">上传时间：{{getBookList.uploadtime | dateToFormatter}}</div>
                 </div>
 
             </div>
@@ -64,7 +67,7 @@
                 <div>分享链接：
                  <a :href="getBookList.link" target="_blank">{{getBookList.link}}</a>   
                 </div>
-                <div>分享密码：{{getBookList.password}}</div>
+                <div>分享密码：{{getBookList.password || '无'}}</div>
             </div>
             </el-dialog>
         </el-main>
@@ -76,6 +79,11 @@
                  size="small" >
                     <el-button slot="append" icon="el-icon-search" size="small" @click="searchBook"></el-button>
                 </el-input>
+            </div>
+            <div class="type-list">
+                <span :class="{active:typeListIndex == index}"
+                 v-for="(item,index) in typeList" :key=index
+                 @click="chooseBookType(index)">{{item.title}}</span>
             </div>
             <div class="latest-share">
                 <h3>最新分享榜</h3>
@@ -157,21 +165,30 @@ export default {
               }
           ]
         return {
-          dialogVisible:false,
-          dialogDetail:false,
-          getBookList:{},
-          bookLists:[],
-          param:{
-              pagenum:1,
-              pagesize:12,
-              searchType:'literature',
-              searchContent:''
-          },
-          currentPage:1,
-          total:100,
-          latestShareList:[],//最新分享
-          shareRankList:[],//分享排行
-          radio1:'',
+            typeListIndex:0,
+            typeList:[
+                {'value':'all','title':'全 部'},
+                {'value':'literature','title':'文学历史'},
+                {'value':'novel','title':'小说传记'},
+                {'value':'technology','title':'科技时尚'},
+                {'value':'education','title':'教育哲学'},
+                {'value':'others','title':'其 他'}
+            ],
+            dialogVisible:false,
+            dialogDetail:false,
+            getBookList:{},
+            bookLists:[],
+            param:{
+                pagenum:1,
+                pagesize:12,
+                searchType:'',
+                searchContent:''
+            },
+            currentPage:1,
+            total:100,
+            latestShareList:[],//最新分享
+            shareRankList:[],//分享排行
+            radio1:'',
         }
         
     },
@@ -193,6 +210,12 @@ this.dataInit();
 
     },
     methods:{
+        chooseBookType(val) {
+            this.typeListIndex = val;
+            this.param.searchType = this.typeList[val].value;
+            this.param.pagenum = 1;
+            this.getBookLists();
+        },
         getBook (index) {
             this.getBookList = this.bookLists[index];
             this.dialogVisible = true; 
@@ -230,7 +253,7 @@ this.dataInit();
             })
         },
         getLatestShareList() {
-          getLatestShare({size:10}).then((res) => {
+          getLatestShare({'size':8}).then((res) => {
               if(res.status == '200000'){
                 this.latestShareList = res.result.data;
               }
@@ -239,7 +262,7 @@ this.dataInit();
           })
         },
         getShareRankList() { //分享排行
-           shareRank({'size':6}).then(res => {
+           shareRank({'size':8}).then(res => {
              if(res.status == '200000'){
                  this.shareRankList = res.result.data;
              }
@@ -282,11 +305,8 @@ this.dataInit();
 </style>
 
 <style lang="scss" scoped>
-$fontColor:#909399;
+@import '@/assets/styles/bookCommon.scss';
 .literature-box {
-    padding:10px;
-    font-family: Arial;
-    font-size: 14px;
     .text-box{
         width: 120px;
         height: 150px;
@@ -302,131 +322,6 @@ $fontColor:#909399;
             color: transparent;
             -webkit-text-stroke: 1px #c7a1a1;
             letter-spacing: 0.04em;
-        }
-
-    }
-    
-}
-aside.el-aside {
-    color: #333;
-    width: 240px !important;
-    padding: 14px;
-    border:1px solid #E9EEF3;
-    background-color: #fff;
-}
-
-.el-main {
-    color: #333;
-    margin-right: 10px;
-    border:1px solid #E9EEF3;
-    position: relative;
-    background-color: #fff;
-    // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
-}
-.book-col{
-    width: 150px;
-    height: 200px;
-    overflow: hidden;
-    text-align: center;
-    .div-img{
-    //   background-color: #f9f8fc;
-    margin-bottom: 4px;
-    }
-    img{
-// box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-box-shadow: 0 2px 12px rgba(0, 0, 0, .32), 0 0 6px rgba(0, 0, 0, .04)
-    }
-}
-.book-name{
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-wrap: none;
-    word-break: keep-all;
-    padding: 0 20px;
-}
-.bookbtn{
-    margin-top: 2px;
-    color:$fontColor;
-    span{
-        cursor: pointer;
-    }
-    span:first-child{
-        margin-right: 10px;
-    }
-    span:hover{
-        color:red;
-    }
-}
-.fen-page{
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-}
-.dialog-box{
-    text-align: center;
-    div {
-        width: 220px;
-        margin: 0 auto;
-        text-align: left;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-}
-.latest-share{
-    h3{
-        margin:20px 0 6px;
-    }
-  div{
-      height: 20px;
-      line-height: 20px;
-      margin-left: 8px;
-      color:$fontColor;
-      text-decoration-line: underline;
-      cursor:pointer;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-  }
-  div:hover{
-      color:#F16B6F;
-  }
-}
-.appreciate{
-    img{
-        display: block;
-        width: 150px;
-        margin: 20px auto;
-    }
-    span{
-        display: block;
-        text-align: center;
-        color:$fontColor;
-    }
-}
-.dialogdetail-box{
-    display: flex;
-    flex-direction: row;
-    justify-content: content;
-    align-items: flex-start;
-    margin-top: 20px;
-    img{
-        box-shadow: 0 2px 12px rgba(0, 0, 0, .32), 0 0 6px rgba(0, 0, 0, .04);
-        margin-right: 16px;
-    }
-    .title{
-        font-size: 16px;
-    }
-    .introduce{
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: flex-start;
-        margin: 10px 0;
-        max-height: 100px;
-        overflow: hidden;
-        div:first-child{
-            flex-shrink: 0;
         }
     }
 }

@@ -19,6 +19,7 @@
                         :options="options"
                         change-on-select
                         filterable
+                        placeholder='请选择'
                         v-model="uploadForm.type"
                       ></el-cascader>
                   </el-form-item>
@@ -37,6 +38,7 @@
                         type="textarea"
                         :autosize="{ minRows: 2, maxRows: 2}"
                         resize="none"
+                        placeholder="http://yuedu.1539.ink"
                         v-model="uploadForm.link" ></el-input>
                   </el-form-item>
                   <el-form-item label="分享密码：" prop="pwdRadio">
@@ -54,7 +56,7 @@
                         </el-radio-group>
                   </el-form-item>
                    <el-form-item>
-                        <el-button type="primary" @click="onSubmit" size="small">立即上传</el-button>
+                        <el-button type="primary" @click="onSubmit" size="small">确认上传</el-button>
                         <el-button size="small" @click="resetForm">取消重置</el-button>
                     </el-form-item>
               </el-form>
@@ -111,18 +113,18 @@ export default {
           uploadForm:{
             title:'',
             introduce:'',
-            type:['books', 'literature'],
+            type:[],
             linktype:'bd',
-            link:'http://yuedu.1539.ink',
+            link:'',
             password:'',
-            pwdRadio:'1',
+            pwdRadio:'2',
             effecttime:0,
             img:''
           },
           rules:{
             title: [
               { required: true, message: '请输入活动名称', trigger: 'blur' },
-              { min: 3, max: 25, message: '长度在 3 到 25 个字符', trigger: 'blur' }
+              { min: 3, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur' }
             ],
             introduce: [
               { required: true, message: '请输入活动名称', trigger: 'blur' },

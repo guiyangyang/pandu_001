@@ -15,6 +15,7 @@
                 <div id="next" class="arrow">›</div>
               </div>
             </div>
+            <load v-if="loading"></load>
         </div>
         <menu-bar ref="menuBar" 
         :ifTitleAndMenuShow='ifTitleAndMenuShow' 
@@ -50,12 +51,14 @@
 <script>
 import TitleBar from './components/TitleBar';
 import MenuBar from './components/MenuBar';
+import Load from '@/components/load';
 import Epub from 'epubjs';
 const DOWLOAD_URL = '/static/cyk.epub';
 global.ePub = Epub;
 export default {
     data() {
       return {
+        loading:true,
         epubRul:'',
         ifTitleAndMenuShow:false,
         fontSizeList:[
@@ -110,7 +113,8 @@ export default {
     },
     components:{
       TitleBar,
-      MenuBar
+      MenuBar,
+      Load
     },
     mounted() {
       this.epubRul = '/static/'+this.$route.query.id;
@@ -152,12 +156,14 @@ export default {
           this.setTheme(this.defaultTheme);// 选择 主题
           //1.6 获取 locations 对象 通过epub函数实现
           this.book.ready.then(() => {
+            this.loading = false;
             this.navigation = this.book.navigation;
             return this.book.locations.generate();
           }).then(result => {
             this.locations = this.book.locations;
             // this.onProgressChange(100);
             this.bookAvailable = true;
+            
           })
           
         },

@@ -50,34 +50,34 @@ export const constantRouterMap = [
       {
         path: 'literature',
         name: 'Literature',
+        hidden:true,
         component: () => import('@/views/books/literature'),
         meta: { title: '文学历史', icon: 'list' }
       },
-      {
-        path: 'novel',
-        name: 'Novel',
-        component: () => import('@/views/books/novel'),
-        meta: { title: '小说传记', icon: 'list' }
-      },
-      {
-        path: 'technology',
-        name: 'technology',
-        component: () => import('@/views/books/technology'),
-        meta: { title: '科技时尚', icon: 'list' }
-      },
-      {
-        path: 'education',
-        name: 'Education',
-        component: () => import('@/views/books/education'),
-        meta: { title: '教育哲学', icon: 'list' }
-      },
-      {
-        path: 'others',
-        name: 'Others',
-        component: () => import('@/views/books/others'),
-        meta: { title: '其他书籍', icon: 'list' }
-      },
-      //education
+      // {
+      //   path: 'novel',
+      //   name: 'Novel',
+      //   component: () => import('@/views/books/novel'),
+      //   meta: { title: '小说传记', icon: 'list' }
+      // },
+      // {
+      //   path: 'technology',
+      //   name: 'technology',
+      //   component: () => import('@/views/books/technology'),
+      //   meta: { title: '科技时尚', icon: 'list' }
+      // },
+      // {
+      //   path: 'education',
+      //   name: 'Education',
+      //   component: () => import('@/views/books/education'),
+      //   meta: { title: '教育哲学', icon: 'list' }
+      // },
+      // {
+      //   path: 'others',
+      //   name: 'Others',
+      //   component: () => import('@/views/books/others'),
+      //   meta: { title: '其他书籍', icon: 'list' }
+      // },
     ]
   },
   {
@@ -90,34 +90,34 @@ export const constantRouterMap = [
       {
         path: 'movies',
         name: 'Movies',
+        hidden:true,
         component: () => import('@/views/videos/movies'),
         meta: { title: '电影', icon: 'list' }
       },
-      {
-        path: 'teleplay',
-        name: 'Teleplay',
-        component: () => import('@/views/videos/teleplay'),
-        meta: { title: '电视剧', icon: 'list' }
-      },
-      {
-        path: 'ITvideo',
-        name: 'ITvideo',
-        component: () => import('@/views/videos/ITvideo'),
-        meta: { title: 'IT视频', icon: 'list' }
-      },
-      {
-        path: 'interest',
-        name: 'Interest',
-        component: () => import('@/views/videos/interest'),
-        meta: { title: '兴趣视频', icon: 'list' }
-      },
-      {
-        path: 'others',
-        name: 'Others',
-        component: () => import('@/views/videos/others'),
-        meta: { title: '其他视频', icon: 'list' }
-      },
-      //education
+      // {
+      //   path: 'teleplay',
+      //   name: 'Teleplay',
+      //   component: () => import('@/views/videos/teleplay'),
+      //   meta: { title: '电视剧', icon: 'list' }
+      // },
+      // {
+      //   path: 'ITvideo',
+      //   name: 'ITvideo',
+      //   component: () => import('@/views/videos/ITvideo'),
+      //   meta: { title: 'IT视频', icon: 'list' }
+      // },
+      // {
+      //   path: 'interest',
+      //   name: 'Interest',
+      //   component: () => import('@/views/videos/interest'),
+      //   meta: { title: '兴趣视频', icon: 'list' }
+      // },
+      // {
+      //   path: 'others',
+      //   name: 'Others',
+      //   component: () => import('@/views/videos/others'),
+      //   meta: { title: '其他视频', icon: 'list' }
+      // },
     ]
   },
   {

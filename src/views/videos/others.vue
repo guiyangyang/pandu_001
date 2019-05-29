@@ -42,8 +42,10 @@
                     <img :src="getBookList.img" alt="">
                 </div>
                 <div>
-                    <div class="title">标题：<span>{{getBookList.title}}</span></div>
-                    <div class="introduce">
+                    <div class="detail-title">
+                        <div> 标题：</div>
+                        <div>{{getBookList.title}}</div></div>
+                    <div class="detail-introduce">
                        <div> 简介：</div>
                        <div>{{getBookList.introduce}}</div>
                        </div>
@@ -63,7 +65,7 @@
                 <div>分享链接：
                  <a :href="getBookList.link" target="_blank">{{getBookList.link}}</a>   
                 </div>
-                <div>分享密码：{{getBookList.password}}</div>
+                <div>分享密码：{{getBookList.password || '无'}}</div>
             </div>
             </el-dialog>
         </el-main>
@@ -166,7 +168,7 @@ export default {
             })
         },
         getLatestShareList() {
-          getLatestShare({size:10}).then((res) => {
+          getLatestShare({'size':8}).then((res) => {
               if(res.status == '200000'){
                 this.latestShareList = res.result.data;
               }
@@ -175,7 +177,7 @@ export default {
           })
         },
         getShareRankList() { //分享排行
-           shareRank({'size':6}).then(res => {
+           shareRank({'size':8}).then(res => {
              if(res.status == '200000'){
                  this.shareRankList = res.result.data;
              }
@@ -218,11 +220,8 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-$fontColor:#909399;
+@import '@/assets/styles/bookCommon.scss';
 .literature-box {
-    padding:10px;
-    font-family: Arial;
-    font-size: 14px;
     .text-box{
         width: 120px;
         height: 150px;
@@ -238,130 +237,6 @@ $fontColor:#909399;
             color: transparent;
             -webkit-text-stroke: 1px #7b6d07;
             letter-spacing: 0.04em;
-        }
-    }
-}
-aside.el-aside {
-    color: #333;
-    width: 240px !important;
-    padding: 14px;
-    border:1px solid #E9EEF3;
-    background-color: #fff;
-}
-
-.el-main {
-    color: #333;
-    margin-right: 10px;
-    border:1px solid #E9EEF3;
-    position: relative;
-    background-color: #fff;
-    // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
-}
-.book-col{
-    width: 150px;
-    height: 200px;
-    overflow: hidden;
-    text-align: center;
-    .div-img{
-    //   background-color: #f9f8fc;
-    margin-bottom: 4px;
-    }
-    img{
-// box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-box-shadow: 0 2px 12px rgba(0, 0, 0, .32), 0 0 6px rgba(0, 0, 0, .04)
-    }
-}
-.book-name{
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-wrap: none;
-    word-break: keep-all;
-    padding: 0 20px;
-}
-.bookbtn{
-    margin-top: 2px;
-    color:$fontColor;
-    span{
-        cursor: pointer;
-    }
-    span:first-child{
-        margin-right: 10px;
-    }
-    span:hover{
-        color:red;
-    }
-}
-.fen-page{
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-}
-.dialog-box{
-    text-align: center;
-    div {
-        width: 220px;
-        margin: 0 auto;
-        text-align: left;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-}
-.latest-share{
-    h3{
-        margin:20px 0 6px;
-    }
-  div{
-      height: 20px;
-      line-height: 20px;
-      margin-left: 8px;
-      color:$fontColor;
-      text-decoration-line: underline;
-      cursor:pointer;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-
-  }
-  div:hover{
-      color:#F16B6F;
-  }
-}
-.appreciate{
-    img{
-        display: block;
-        width: 150px;
-        margin: 20px auto;
-    }
-    span{
-        display: block;
-        text-align: center;
-        color:$fontColor;
-    }
-}
-.dialogdetail-box{
-    display: flex;
-    flex-direction: row;
-    justify-content: content;
-    align-items: flex-start;
-    margin-top: 20px;
-    img{
-        box-shadow: 0 2px 12px rgba(0, 0, 0, .32), 0 0 6px rgba(0, 0, 0, .04);
-        margin-right: 16px;
-    }
-    .title{
-        font-size: 16px;
-    }
-    .introduce{
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: flex-start;
-        margin: 10px 0;
-        max-height: 100px;
-        overflow: hidden;
-        div:first-child{
-            flex-shrink: 0;
         }
     }
 }
