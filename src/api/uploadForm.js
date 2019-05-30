@@ -2,7 +2,7 @@ import request from "@/utils/request"
 
 export function uploadForm(datas){// 上传 网盘资源
     return request({
-        url:'/uploadForm',
+        url:'/apis/uploadForm',
         method:'post',
         data:datas
     })
@@ -10,7 +10,7 @@ export function uploadForm(datas){// 上传 网盘资源
 
 export function uploadEpub(datas){// 上传 epub书籍
     return request({
-        url:'/uploadForm/epub',
+        url:'/apis/uploadForm/epub',
         method:'post',
         // contentType:'application/x-www-form-urlencoded',
         headers:{
@@ -22,7 +22,7 @@ export function uploadEpub(datas){// 上传 epub书籍
 
 export function upImg(datas){  //单独 上传图片
     return request({
-        url:'/uploadForm/upImg',
+        url:'/apis/uploadForm/upImg',
         method:'post',
         data:datas
     })
